@@ -4,33 +4,68 @@
 @using System.Text
 
 <div class="app-shell">
-  @* Навигация по разделам. Кнопки переключают переменную tab. *@
-  <aside class="sidebar">
-    <div class="brand"><span class="brand-icon">▦</span><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
-    <div class="side-section">РАЗДЕЛЫ</div>
-    <nav class="side-nav" aria-label="Разделы системы">
-      <button class="@(tab == "home" ? "selected" : "")" @onclick='() => Go("home")'><span>⌂</span> Главная</button>
-      <button class="@(tab == "materials" ? "selected" : "")" @onclick='() => Go("materials")'><span>▣</span> Материалы</button>
-      <button class="@(tab == "operation" ? "selected" : "")" @onclick='() => Go("operation")'><span>⇄</span> Приход и расход</button>
-      <button class="@(tab == "history" ? "selected" : "")" @onclick='() => Go("history")'><span>☷</span> История</button>
-      <button class="@(tab == "report" ? "selected" : "")" @onclick='() => Go("report")'><span>▤</span> Отчёт</button>
-    </nav>
-    <div class="sidebar-note"><span class="dot"></span> Учебная информационная система <p>Проект на C# · Blazor WebAssembly</p></div>
-  </aside>
+  @* Горизонтальное меню в верхней синей полосе, как на сайте-примере. *@
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand"><span class="brand-icon">▦</span><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
+      <nav class="side-nav" aria-label="Разделы системы">
+        <button type="button" class="@(tab == "home" ? "selected" : "")" @onclick='() => Go("home")'><span>⌂</span> Главная</button>
+        <button type="button" class="@(tab == "materials" ? "selected" : "")" @onclick='() => Go("materials")'><span>▣</span> Материалы</button>
+        <button type="button" class="@(tab == "operation" ? "selected" : "")" @onclick='() => Go("operation")'><span>⇄</span> Приход и расход</button>
+        <button type="button" class="@(tab == "history" ? "selected" : "")" @onclick='() => Go("history")'><span>☷</span> История</button>
+        <button type="button" class="@(tab == "report" ? "selected" : "")" @onclick='() => Go("report")'><span>▤</span> Отчёт</button>
+      </nav>
+    </div>
+  </header>
 
   <main class="main-content">
-    <header class="topbar"><span>ИС учёта материальных ресурсов предприятия</span><span class="user-pill">● Демо-режим</span></header>
+    @if (tab == "home")
+    {
+      @* Основной синий блок главной страницы. *@
+      <section class="hero-banner">
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <span class="hero-kicker">МАТРЕСУРС · УЧЁТ ПРЕДПРИЯТИЯ</span>
+            <h1>Материальные ресурсы<br />под контролем</h1>
+            <p>Удобная информационная система для учёта материалов: добавляй позиции, оформляй приход и расход, следи за остатками и формируй отчёты.</p>
+            <div class="hero-actions">
+              <button type="button" class="hero-primary" @onclick='() => Go("operation")'>+ Новая операция <span aria-hidden="true">→</span></button>
+              <button type="button" class="hero-secondary" @onclick='() => Go("materials")'>Открыть материалы</button>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="hero-card-icon" aria-hidden="true">▦</div>
+            <h2>Почему это удобно?</h2>
+            <ul>
+              <li>Все материалы и остатки в одном месте</li>
+              <li>История каждого поступления и расхода</li>
+              <li>Проверка количества перед списанием</li>
+              <li>Готовый отчёт для скачивания</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    }
     <div class="content">
       @if (tab == "home")
       {
         @* Главная: показатели склада и общие остатки. *@
-        <div class="page-top"><div><div class="eyebrow">ОБЗОР СИСТЕМЫ</div><h1>Главная</h1><p>Все важные данные о материалах в одном месте.</p></div><button class="primary-button" @onclick='() => Go("operation")'>+ Новая операция</button></div>
+        <div class="section-intro"><div><h2>Склад в цифрах</h2><p>Актуальные показатели по материалам</p></div><span class="demo-label">● Демо-данные</span></div>
         <div class="stat-grid">
           <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-label">Наименований</div><div class="stat-number">@data.Materials.Count</div><div class="stat-help">В справочнике материалов</div></div>
           <div class="stat-card"><div class="stat-icon violet">▥</div><div class="stat-label">Единиц на складе</div><div class="stat-number">@data.Materials.Sum(m => m.Quantity)</div><div class="stat-help">Текущий остаток</div></div>
           <div class="stat-card"><div class="stat-icon green">₽</div><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div><div class="stat-help">По учётным ценам</div></div>
           <div class="stat-card"><div class="stat-icon orange">!</div><div class="stat-label">Мало на складе</div><div class="stat-number">@LowCount</div><div class="stat-help">Требуют внимания</div></div>
         </div>
+        @* Три информационные карточки по образцу структуры сайта-примера. *@
+        <section class="features-band" aria-label="Возможности системы">
+          <div class="features-heading"><span>ВОЗМОЖНОСТИ СИСТЕМЫ</span><h2>Всё необходимое для учёта</h2></div>
+          <div class="features-grid">
+            <article class="feature-card"><div class="feature-symbol">▣</div><h3>Справочник материалов</h3><p>Добавление новых позиций, изменение цен и контроль минимального остатка.</p></article>
+            <article class="feature-card"><div class="feature-symbol">⇄</div><h3>Приход и расход</h3><p>Регистрация движения ресурсов с автоматическим пересчётом количества.</p></article>
+            <article class="feature-card"><div class="feature-symbol">▤</div><h3>Отчётность</h3><p>История операций, итоговая стоимость запасов и скачивание CSV.</p></article>
+          </div>
+        </section>
         <div class="panel">
           <div class="panel-title-row"><div><h2>Остатки материалов</h2><p>Актуальные сведения по всем позициям</p></div><button class="quiet-button" @onclick='() => Go("materials")'>Все материалы →</button></div>
           <MaterialTable Items="data.Materials" AllowEdit="false" />
@@ -94,7 +129,12 @@
       }
 
 
-      <footer>МатРесурс · учебная информационная система · C# / Blazor WebAssembly <button @onclick="ResetDemo">Сбросить демонстрацию</button></footer>
+      @* Авторская подпись отображается внизу любого раздела. *@
+      <footer class="site-footer">
+        <div class="footer-project"><strong>МатРесурс</strong><span>Информационная система учёта материальных ресурсов</span></div>
+        <div class="footer-author">Выполнила: <strong>Лантух Виктория Евгеньевна</strong></div>
+        <button type="button" class="footer-reset" @onclick="ResetDemo">Сбросить демонстрацию</button>
+      </footer>
     </div>
   </main>
 </div>
