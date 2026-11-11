@@ -1,7 +1,11 @@
+@namespace MatResurs.Pages
+@* Таблица остатков: показывается на главной и в разделе «Материалы». *@
 <div class="table-wrap">
   <table>
+    @* Заголовки столбцов и дополнительная кнопка «Изменить». *@
     <thead><tr><th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена за ед.</th><th>Состояние</th>@if (AllowEdit) { <th>Действие</th> }</tr></thead>
     <tbody>
+      @* Обходим материалы в алфавитном порядке. *@
       @foreach (var item in Items.OrderBy(m => m.Name))
       {
         <tr>
@@ -19,7 +23,9 @@
 </div>
 
 @code {
+  // Данные и настройки таблицы передаются из Dashboard.razor.
   [Parameter] public List<Material> Items { get; set; } = new();
   [Parameter] public bool AllowEdit { get; set; }
+  // Событие нажатия на кнопку изменения строки.
   [Parameter] public EventCallback<Material> OnEdit { get; set; }
 }

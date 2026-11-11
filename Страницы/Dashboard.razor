@@ -1,9 +1,12 @@
+@namespace MatResurs.Pages
+@* Главный экран на C#: здесь находятся разделы материалов, движения и отчётов. *@
 @inject IJSRuntime Js
 @using System.Text
 
 <div class="app-shell">
+  @* Навигация по разделам. Кнопки переключают переменную tab. *@
   <aside class="sidebar">
-    <div class="brand"><span class="brand-icon">▦</span><div><b>@theme.Title</b><small>Учёт материалов</small></div></div>
+    <div class="brand"><span class="brand-icon">▦</span><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
     <div class="side-section">РАЗДЕЛЫ</div>
     <nav class="side-nav" aria-label="Разделы системы">
       <button class="@(tab == "home" ? "selected" : "")" @onclick='() => Go("home")'><span>⌂</span> Главная</button>
@@ -11,7 +14,6 @@
       <button class="@(tab == "operation" ? "selected" : "")" @onclick='() => Go("operation")'><span>⇄</span> Приход и расход</button>
       <button class="@(tab == "history" ? "selected" : "")" @onclick='() => Go("history")'><span>☷</span> История</button>
       <button class="@(tab == "report" ? "selected" : "")" @onclick='() => Go("report")'><span>▤</span> Отчёт</button>
-      <button class="@(tab == "appearance" ? "selected" : "")" @onclick='() => Go("appearance")'><span>⚙</span> Оформление</button>
     </nav>
     <div class="sidebar-note"><span class="dot"></span> Учебная информационная система <p>Проект на C# · Blazor WebAssembly</p></div>
   </aside>
@@ -21,6 +23,7 @@
     <div class="content">
       @if (tab == "home")
       {
+        @* Главная: показатели склада и общие остатки. *@
         <div class="page-top"><div><div class="eyebrow">ОБЗОР СИСТЕМЫ</div><h1>Главная</h1><p>Все важные данные о материалах в одном месте.</p></div><button class="primary-button" @onclick='() => Go("operation")'>+ Новая операция</button></div>
         <div class="stat-grid">
           <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-label">Наименований</div><div class="stat-number">@data.Materials.Count</div><div class="stat-help">В справочнике материалов</div></div>
@@ -36,6 +39,7 @@
       }
       else if (tab == "materials")
       {
+        @* Материалы: форма добавления, редактирование и поиск. *@
         <div class="page-top"><div><div class="eyebrow">СПРАВОЧНИК</div><h1>Материалы</h1><p>Добавляй материалы и отслеживай их количество.</p></div></div>
         <div class="panel form-panel"><h2>@(editId == 0 ? "Добавить материал" : "Изменить материал")</h2>
           <div class="form-grid">
@@ -51,6 +55,7 @@
       }
       else if (tab == "operation")
       {
+        @* Операции: приход увеличивает остаток, расход уменьшает. *@
         <div class="page-top"><div><div class="eyebrow">СКЛАДСКОЙ УЧЁТ</div><h1>Приход и расход</h1><p>Оформи поступление или выдачу со склада.</p></div></div>
         <div class="panel form-panel narrow-panel"><h2>Новая операция</h2>
           <div class="type-switch"><button class="@(operationType == "Приход" ? "active" : "")" @onclick='() => operationType = "Приход"'>↓ Приход</button><button class="@(operationType == "Расход" ? "active" : "")" @onclick='() => operationType = "Расход"'>↑ Расход</button></div>
@@ -66,6 +71,7 @@
       }
       else if (tab == "history")
       {
+        @* История: журнал всех движений материалов. *@
         <div class="page-top"><div><div class="eyebrow">ЖУРНАЛ</div><h1>История операций</h1><p>Все поступления и выдачи с датой и остатком после операции.</p></div></div>
         <div class="panel"><div class="panel-title-row"><h2>Журнал движений</h2><span class="subtle">Всего записей: @data.Operations.Count</span></div>
           <div class="table-wrap"><table><thead><tr><th>Дата</th><th>Материал</th><th>Операция</th><th>Количество</th><th>Остаток</th><th>Комментарий</th></tr></thead><tbody>
@@ -76,6 +82,7 @@
       }
       else if (tab == "report")
       {
+        @* Отчёт: список остатков и экспорт CSV. *@
         <div class="page-top"><div><div class="eyebrow">АНАЛИТИКА</div><h1>Отчёт по остаткам</h1><p>Сводная стоимость материалов и список товаров.</p></div><button class="primary-button" @onclick="ExportReport">↓ Скачать CSV</button></div>
         <div class="stat-grid two"><div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-label">Всего позиций</div><div class="stat-number">@data.Materials.Count</div></div><div class="stat-card"><div class="stat-icon green">₽</div><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div></div></div>
         <div class="panel"><div class="panel-title-row"><h2>Ведомость остатков</h2><span class="subtle">Дата: @DateTime.Now.ToString("dd.MM.yyyy")</span></div>
@@ -87,136 +94,40 @@
       }
 
 
-      else if (tab == "appearance")
-      {
-        <div class="page-top"><div><div class="eyebrow">РЕДАКТОР БЕЗ КОДА</div><h1>Оформление сайта</h1><p>Меняй оформление и сразу смотри результат, прежде чем опубликовать его для всех.</p></div></div>
-        <div class="theme-workspace">
-          <div class="theme-settings-column">
-            <div class="panel theme-panel">
-              <div class="panel-title-row"><div><h2>Готовые темы</h2><p>Выбери стиль одним нажатием.</p></div></div>
-              <div class="theme-presets">
-                <button type="button" @onclick='() => ChooseTheme("blue")'><span class="theme-preset-icon preset-blue"></span><span><b>Классика</b><small>Синий и бирюза</small></span></button>
-                <button type="button" @onclick='() => ChooseTheme("mint")'><span class="theme-preset-icon preset-mint"></span><span><b>Мятная</b><small>Зелёные акценты</small></span></button>
-                <button type="button" @onclick='() => ChooseTheme("purple")'><span class="theme-preset-icon preset-purple"></span><span><b>Лавандовая</b><small>Фиолетовая палитра</small></span></button>
-                <button type="button" @onclick='() => ChooseTheme("warm")'><span class="theme-preset-icon preset-warm"></span><span><b>Тёплая</b><small>Оранжевые акценты</small></span></button>
-              </div>
-            </div>
-            <div class="panel theme-panel">
-              <div class="panel-title-row"><div><h2>Настроить самостоятельно</h2><p>Окно справа меняется сразу при выборе цвета, шрифта или названия.</p></div></div>
-              <div class="theme-colors">
-                <label><span>Основной цвет</span><input type="color" @bind="theme.Primary" @bind:event="oninput" @bind:after="PreviewTheme" /><small>@theme.Primary</small></label>
-                <label><span>Цвет акцентов</span><input type="color" @bind="theme.Accent" @bind:event="oninput" @bind:after="PreviewTheme" /><small>@theme.Accent</small></label>
-                <label><span>Боковое меню</span><input type="color" @bind="theme.Sidebar" @bind:event="oninput" @bind:after="PreviewTheme" /><small>@theme.Sidebar</small></label>
-                <label><span>Фон страниц</span><input type="color" @bind="theme.Background" @bind:event="oninput" @bind:after="PreviewTheme" /><small>@theme.Background</small></label>
-              </div>
-              <div class="form-grid theme-options">
-                <label>Название сайта
-                  <input maxlength="48" @bind="theme.Title" @bind:event="oninput" @bind:after="PreviewTheme" placeholder="МатРесурс" />
-                </label>
-                <label>Шрифт
-                  <select @bind="theme.Font" @bind:after="PreviewTheme">
-                    <option value="system">Современный</option>
-                    <option value="arial">Классический</option>
-                    <option value="georgia">С засечками</option>
-                  </select>
-                </label>
-                <label>Скругление углов: @theme.Radius px
-                  <input type="range" min="8" max="26" step="1" @bind="theme.Radius" @bind:event="oninput" @bind:after="PreviewTheme" />
-                </label>
-              </div>
-            </div>
-            <div class="theme-publication">
-              <div><b>Нравится результат?</b><p>Нажми «Опубликовать для всех», когда закончишь. В GitHub останется подтвердить заявку кнопкой <strong>Submit new issue</strong>. До подтверждения никто другой не увидит твои изменения.</p></div>
-              <div class="theme-publication-actions"><a class="primary-button" href="@PublishThemeUrl" target="_blank" rel="noopener noreferrer">Опубликовать для всех ↗</a><button class="outline-button" @onclick="RestorePublishedTheme">Вернуть текущий дизайн</button></div>
-              <p class="theme-warning">Публикация доступна только владельцу GitHub-репозитория viktorialantuh. Цвета в окне предпросмотра не меняют сайт для других посетителей.</p>
-            </div>
-          </div>
-          <div class="theme-preview-column">
-            <div class="panel theme-live-panel">
-              <div class="theme-preview-heading">
-                <div><h2>Предпросмотр сайта</h2><p>Так будет выглядеть твой сайт.</p></div>
-                <span class="theme-preview-badge"><span>●</span> Не опубликовано</span>
-              </div>
-              <div class="theme-preview-switch" aria-label="Размер экрана предпросмотра">
-                <button type="button" class="@(!previewMobile ? "active" : "")" @onclick="() => previewMobile = false">▣ Ноутбук</button>
-                <button type="button" class="@(previewMobile ? "active" : "")" @onclick="() => previewMobile = true">▯ Телефон</button>
-              </div>
-              <div class="theme-preview-stage @(previewMobile ? "mobile" : "")" style="@PreviewCssVariables">
-                <div class="theme-preview-browser">
-                  <div class="theme-preview-browserbar">
-                    <div class="theme-preview-dots"><i></i><i></i><i></i></div>
-                    <span>viktorialantuh.github.io/matresurs/</span>
-                  </div>
-                  <div class="theme-preview-app">
-                    <aside class="theme-preview-sidebar">
-                      <div class="theme-preview-brand"><div class="theme-preview-logo">▦</div><strong>@theme.Title</strong></div>
-                      <div class="theme-preview-nav active">⌂ <span>Главная</span></div>
-                      <div class="theme-preview-nav">▣ <span>Материалы</span></div>
-                      <div class="theme-preview-nav">⇄ <span>Приход и расход</span></div>
-                      <div class="theme-preview-nav">▤ <span>Отчёт</span></div>
-                    </aside>
-                    <section class="theme-preview-content">
-                      <div class="theme-preview-topbar"><span>Учёт материальных ресурсов</span><span class="theme-preview-demo">● Демо</span></div>
-                      <div class="theme-preview-inner">
-                        <div class="theme-preview-kicker">ОБЗОР СИСТЕМЫ</div>
-                        <h3>Главная</h3>
-                        <p>Все важные данные в одном месте</p>
-                        <div class="theme-preview-stats">
-                          <div class="theme-preview-stat"><small>Материалы</small><strong>12</strong></div>
-                          <div class="theme-preview-stat"><small>На складе</small><strong>245</strong></div>
-                        </div>
-                        <div class="theme-preview-table">
-                          <div class="theme-preview-tablehead"><strong>Остатки материалов</strong><span>Все материалы</span></div>
-                          <div class="theme-preview-tr"><span>Бумага А4</span><span>28 пач.</span></div>
-                          <div class="theme-preview-tr"><span>Ручка шариковая</span><span>65 шт.</span></div>
-                          <div class="theme-preview-tr"><span>Папка-регистратор</span><span>12 шт.</span></div>
-                        </div>
-                        <div class="theme-preview-actions"><span class="theme-preview-primary">+ Новая операция</span><span class="theme-preview-secondary">Подробнее</span></div>
-                      </div>
-                    </section>
-                  </div>
-                </div>
-              </div>
-              <p class="theme-preview-caption">Это пример интерфейса с условными числами. Настоящие данные склада не изменяются.</p>
-            </div>
-          </div>
-        </div>
-      }
       <footer>МатРесурс · учебная информационная система · C# / Blazor WebAssembly <button @onclick="ResetDemo">Сбросить демонстрацию</button></footer>
     </div>
   </main>
 </div>
 
 @code {
+    // Начальное состояние программы: учебные материалы для демонстрации.
     private InventoryData data = InventoryData.CreateDemo();
-    private SiteTheme theme = new();
-    private SiteTheme publishedTheme = new();
-    private bool previewMobile;
-    private string PreviewCssVariables =>
-        $"--preview-primary:{theme.Primary};--preview-accent:{theme.Accent};--preview-sidebar:{theme.Sidebar};" +
-        $"--preview-background:{theme.Background};--preview-radius:{theme.Radius}px;" +
-        $"--preview-font:{(theme.Font == "georgia" ? "Georgia, serif" : theme.Font == "arial" ? "Arial, sans-serif" : "system-ui, sans-serif")};";
-
+    // Какой раздел сайта сейчас открыт.
     private string tab = "home";
+    // Сообщение об ошибке или успешной операции.
     private string message = "";
+    // Поля формы материала, включая поиск и редактирование.
     private string search = "";
     private int editId;
     private string materialName = "";
     private string materialUnit = "шт.";
     private decimal materialPrice;
     private int materialMinimum;
+    // Поля формы приходной или расходной операции.
     private string operationType = "Приход";
     private int selectedMaterial;
     private int operationQuantity = 1;
     private string operationNote = "";
     private bool error;
     private bool initialized;
+    // Вычисляемые показатели: общая стоимость, низкий остаток, фильтрация.
     private decimal TotalValue => data.Materials.Sum(m => m.Price * m.Quantity);
     private int LowCount => data.Materials.Count(m => m.Quantity <= m.MinQuantity);
     private List<Material> FilteredMaterials => data.Materials.Where(m => m.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
     private string MessageClass => error ? "message error" : "message success";
     private static string Money(decimal v) => v.ToString("N2", new CultureInfo("ru-RU")) + " ₽";
 
+    // При первом открытии загружаем ранее сохранённые данные браузера.
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender) return;
@@ -230,18 +141,15 @@
             }
         }
         catch (Exception) { /* Браузер может блокировать localStorage. Демо всё равно работает. */ }
-        try
-        {
-            var savedTheme = await Js.InvokeAsync<SiteTheme>("matresursTheme.load");
-            if (savedTheme != null) { theme = savedTheme; publishedTheme = savedTheme.Copy(); }
-        }
-        catch (Exception) { /* Используем оформление по умолчанию. */ }
         initialized = true;
         StateHasChanged();
     }
 
+    // Открыть выбранный раздел и очистить временные уведомления.
     private void Go(string value) { tab = value; message = ""; search = ""; }
+    // Вывести текст сообщения под формой.
     private void Notify(string value, bool isError = false) { message = value; error = isError; }
+    // Сохранить изменения в localStorage. На другом компьютере данные не появятся.
     private async Task Persist()
     {
         if (!initialized) return;
@@ -249,15 +157,18 @@
         catch (Exception) { Notify("В этом браузере сохранение запрещено. Данные доступны до обновления страницы.", true); }
     }
 
+    // Очистить форму добавления материала.
     private void ClearMaterialForm()
     {
         editId = 0; materialName = ""; materialUnit = "шт."; materialPrice = 0; materialMinimum = 0;
     }
+    // Заполнить форму значениями выбранного материала.
     private void Edit(Material m)
     {
         editId = m.Id; materialName = m.Name; materialUnit = m.Unit;
         materialPrice = m.Price; materialMinimum = m.MinQuantity; message = "";
     }
+    // Проверить поля и добавить либо обновить материал.
     private async Task SaveMaterial()
     {
         string name = materialName.Trim();
@@ -280,6 +191,7 @@
         Notify("Материал сохранён. Для увеличения остатка оформи приход.");
         await Persist();
     }
+    // Изменить остаток и добавить строку в журнал операций.
     private async Task MakeOperation()
     {
         var item = data.Materials.FirstOrDefault(m => m.Id == selectedMaterial);
@@ -296,6 +208,7 @@
         operationQuantity = 1; operationNote = "";
         await Persist();
     }
+    // С согласия пользователя восстановить учебные данные.
     private async Task ResetDemo()
     {
         if (!await Js.InvokeAsync<bool>("matresursStorage.askReset")) return;
@@ -303,41 +216,9 @@
         await Persist(); Go("home");
     }
 
-    private async Task PreviewTheme()
-    {
-        try { await Js.InvokeVoidAsync("matresursTheme.preview", theme); }
-        catch (Exception) { /* Используем оформление по умолчанию. */ }
-    }
-    private async Task ChooseTheme(string preset)
-    {
-        theme = preset switch
-        {
-            "mint" => new SiteTheme { Title = theme.Title, Primary = "#129a88", Accent = "#16b49b", Sidebar = "#133e45", Background = "#effbf8", Radius = 16, Font = theme.Font },
-            "purple" => new SiteTheme { Title = theme.Title, Primary = "#7755e8", Accent = "#bb73dc", Sidebar = "#251d4c", Background = "#f6f3ff", Radius = 20, Font = theme.Font },
-            "warm" => new SiteTheme { Title = theme.Title, Primary = "#df7537", Accent = "#eb9e4d", Sidebar = "#3d2b29", Background = "#fff9f2", Radius = 14, Font = theme.Font },
-            _ => new SiteTheme { Title = theme.Title, Font = theme.Font }
-        };
-        await PreviewTheme();
-    }
-    private async Task RestorePublishedTheme()
-    {
-        theme = publishedTheme.Copy();
-        await PreviewTheme();
-    }
-    private string PublishThemeUrl
-    {
-        get
-        {
-            var safeTheme = theme.Copy();
-            if (string.IsNullOrWhiteSpace(safeTheme.Title)) safeTheme.Title = "МатРесурс";
-            safeTheme.Title = safeTheme.Title.Trim();
-            var body = "MATRESURS_THEME_V1\n" + JsonSerializer.Serialize(safeTheme);
-            return "https://github.com/viktorialantuh/matresurs/issues/new?title="
-                + Uri.EscapeDataString("[MatResurs theme] Новое оформление")
-                + "&body=" + Uri.EscapeDataString(body);
-        }
-    }
+    // Корректно оформить текст с кавычками для формата CSV.
     private static string Csv(string s) => "\"" + s.Replace("\"", "\"\"") + "\"";
+    // Составить отчёт об остатках и скачать CSV-файл.
     private async Task ExportReport()
     {
         var csv = new StringBuilder("Наименование;Единица;Количество;Цена;Стоимость\r\n");
