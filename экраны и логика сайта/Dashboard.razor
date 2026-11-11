@@ -120,7 +120,7 @@
       else if (tab == "report")
       {
         @* Отчёт: список остатков и экспорт CSV. *@
-        <div class="page-top"><div><div class="eyebrow">АНАЛИТИКА</div><h1>Отчёт по остаткам</h1><p>Сводная стоимость материалов и список товаров.</p></div><button class="primary-button" @onclick="ExportReport">↓ Скачать CSV</button></div>
+        <div class="page-top"><div><div class="eyebrow">АНАЛИТИКА</div><h1>Отчёт по остаткам</h1><p>Сводная стоимость материалов и список товаров.</p></div><button class="primary-button" @onclick="ExportReport">Скачать отчет</button></div>
         <div class="stat-grid two"><div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-label">Всего позиций</div><div class="stat-number">@data.Materials.Count</div></div><div class="stat-card"><div class="stat-icon green">₽</div><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div></div></div>
         <div class="panel"><div class="panel-title-row"><h2>Ведомость остатков</h2><span class="subtle">Дата: @DateTime.Now.ToString("dd.MM.yyyy")</span></div>
           <div class="table-wrap"><table><thead><tr><th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена</th><th>Стоимость</th></tr></thead><tbody>

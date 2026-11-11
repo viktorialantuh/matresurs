@@ -624,3 +624,51 @@ td { border-bottom-color: #e0e6ed; }
   .stat-number { font-size: 24px; }
   .hero-inner { padding: 28px 15px; }
 }
+
+
+/* 14. Небольшая доработка классического оформления.
+   Стандартный шрифт и прямые углы остаются без изменений. */
+:root {
+  --navy: #254c74;
+  --navy-dark: #1a3958;
+  --page: #f2f5f8;
+}
+.site-header { background: #254c74; border-bottom-color: #9ab2cb; }
+.header-inner { min-height: 80px; }
+.side-nav button { min-height: 42px; }
+.side-nav button.selected,
+.side-nav button.selected:hover {
+  border-color: #d7e2ed;
+  border-bottom-color: #d7e2ed;
+  color: #183c61;
+}
+.section-intro h2, .panel-title-row h2 { font-weight: bold; }
+.section-intro p, .panel-title-row p { line-height: 1.5; }
+.hero-banner { border-bottom: 1px solid #cfdae6; }
+.hero-copy h1 { color: #1d4268; }
+.hero-card { background: #fcfdff; }
+.stat-grid .stat-card:nth-child(1) { border-top-color: #698bab; }
+.stat-grid .stat-card:nth-child(2) { border-top-color: #8c92b6; }
+.stat-grid .stat-card:nth-child(3) { border-top-color: #68988b; }
+.stat-grid .stat-card:nth-child(4) { border-top-color: #c39a65; }
+.stat-card .stat-number { line-height: 1.18; }
+.stat-card .stat-help { line-height: 1.45; }
+.table-wrap { background: #fff; }
+th { border-right: 1px solid #d7e1eb; }
+th:last-child { border-right: 0; }
+tbody tr { transition: background-color .12s ease; }
+tbody tr:hover { background: #e9f1f8; }
+tfoot td { border-top: 2px solid #9db1c6; }
+.primary-button, .outline-button, .hero-primary, .hero-secondary { line-height: 1.3; }
+.primary-button:active, .hero-primary:active,
+.table-actions button:active { transform: translateY(1px); }
+.table-actions .edit-button,
+.table-actions .delete-button { min-height: 35px; }
+.form-grid label { font-weight: normal; }
+.form-grid input:hover,
+.form-grid select:hover,
+.search:hover { border-color: #7892ad; }
+.material-native-dialog { border: 1px solid #8da2b8; }
+.material-modal-heading { border-bottom: 1px solid #e0e6ed; padding-bottom: 15px; }
+.material-modal-actions { padding-top: 6px; }
+.site-footer { border-top: 3px solid #9cb4cc; }
