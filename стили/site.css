@@ -548,3 +548,24 @@ td button:hover { background: #dbeaff; }
   .actions-cell { min-width: 192px; }
   .table-actions .edit-button, .table-actions .delete-button { padding: 8px 9px; font-size: 11px; }
 }
+
+
+/* Дополнительная защита от наложения старых стилей: диалоги принадлежат корню приложения.
+   Даже если браузер ранее сохранил CSS в кеше, расположение задаётся также в Razor. */
+.app-shell > .material-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+}
+.app-shell > .material-modal-backdrop > .material-modal {
+  position: relative !important;
+  margin: auto !important;
+  z-index: 1;
+  background: #fff;
+}

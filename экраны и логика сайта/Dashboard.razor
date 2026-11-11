@@ -131,11 +131,21 @@
 
 
 
+      @* Авторская подпись отображается внизу любого раздела. *@
+      <footer class="site-footer">
+        <div class="footer-project"><strong>МатРесурс</strong><span>Информационная система учёта материальных ресурсов</span></div>
+        <div class="footer-author">Выполнила: <strong>Лантух Виктория Евгеньевна</strong></div>
+        <button type="button" class="footer-reset" @onclick="ResetDemo">Сбросить демонстрацию</button>
+      </footer>
+    </div>
+  </main>
+
+  @* Диалоги расположены непосредственно в корне приложения, а не внутри таблиц и панелей. *@
       @* ФОРМА РЕДАКТИРОВАНИЯ: открывается поверх страницы по центру экрана. *@
       @if (tab == "materials" && editId != 0)
       {
-        <div class="material-modal-backdrop">
-          <section class="material-modal" role="dialog" aria-modal="true" aria-labelledby="edit-material-title">
+        <div class="material-modal-backdrop" style="position:fixed !important;inset:0 !important;z-index:2147483000;display:flex !important;align-items:center !important;justify-content:center !important;padding:20px;min-height:100vh;min-height:100dvh;width:100%;overflow-y:auto;background:rgba(5,19,42,.76);backdrop-filter:blur(5px);">
+          <section class="material-modal" style="position:relative;display:block;flex-shrink:1;width:min(100%,570px);max-height:calc(100dvh - 40px);margin:auto;overflow-y:auto;background:#ffffff;border-radius:20px;border:1px solid #dce7f6;box-shadow:0 25px 90px rgba(0,15,43,.38);padding:28px;" role="dialog" aria-modal="true" aria-labelledby="edit-material-title">
             <div class="material-modal-heading">
               <div><span class="material-modal-kicker">СПРАВОЧНИК МАТЕРИАЛОВ</span><h2 id="edit-material-title">Изменить материал</h2><p>Отредактируй данные и нажми «Сохранить изменения».</p></div>
               <button type="button" class="material-modal-close" aria-label="Закрыть окно редактирования" @onclick="CloseEdit">✕</button>
@@ -162,8 +172,8 @@
       @* ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ: отдельное заметное окно по центру, ничего не удаляет без подтверждения. *@
       @if (tab == "materials" && pendingDeleteId != 0 && PendingDeleteMaterial != null)
       {
-        <div class="material-modal-backdrop">
-          <section class="material-modal material-modal-delete" role="alertdialog" aria-modal="true"
+        <div class="material-modal-backdrop" style="position:fixed !important;inset:0 !important;z-index:2147483000;display:flex !important;align-items:center !important;justify-content:center !important;padding:20px;min-height:100vh;min-height:100dvh;width:100%;overflow-y:auto;background:rgba(5,19,42,.76);backdrop-filter:blur(5px);">
+          <section class="material-modal material-modal-delete" style="position:relative;display:block;flex-shrink:1;width:min(100%,570px);max-height:calc(100dvh - 40px);margin:auto;overflow-y:auto;background:#ffffff;border-radius:20px;border:1px solid #dce7f6;box-shadow:0 25px 90px rgba(0,15,43,.38);padding:28px;" role="alertdialog" aria-modal="true"
                    aria-labelledby="delete-material-title" aria-describedby="delete-material-description">
             <div class="material-modal-heading">
               <div><span class="material-modal-kicker danger">ПОДТВЕРЖДЕНИЕ ДЕЙСТВИЯ</span><h2 id="delete-material-title">Удалить материал?</h2></div>
@@ -182,14 +192,7 @@
         </div>
       }
 
-      @* Авторская подпись отображается внизу любого раздела. *@
-      <footer class="site-footer">
-        <div class="footer-project"><strong>МатРесурс</strong><span>Информационная система учёта материальных ресурсов</span></div>
-        <div class="footer-author">Выполнила: <strong>Лантух Виктория Евгеньевна</strong></div>
-        <button type="button" class="footer-reset" @onclick="ResetDemo">Сбросить демонстрацию</button>
-      </footer>
-    </div>
-  </main>
+
 </div>
 
 @code {
