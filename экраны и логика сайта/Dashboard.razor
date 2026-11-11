@@ -82,6 +82,11 @@
             <label>Единица измерения<select @bind="materialUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label>
             <label>Цена, ₽<input type="number" min="0" step="0.01" @bind="materialPrice" /></label>
             <label>Минимальный остаток<input type="number" min="0" step="1" @bind="materialMinimum" /></label>
+            @if (editId == 0)
+            {
+              @* Начальное количество задаётся только при создании. Дальнейшие изменения — через приход/расход. *@
+              <label>Количество на складе<input type="number" min="0" step="1" placeholder="0" @bind="materialInitialQuantity" /></label>
+            }
           </div>
           <div class="form-actions"><button class="primary-button" @onclick="SaveMaterial">@(editId == 0 ? "Добавить материал" : "Сохранить изменения")</button>@if (editId != 0) { <button class="outline-button" @onclick="ClearMaterialForm">Отмена</button> }</div>
           @if (!string.IsNullOrWhiteSpace(message)) { <div class="@MessageClass">@message</div> }
@@ -125,7 +130,6 @@
             @foreach (var m in data.Materials.OrderBy(m => m.Name)) { <tr><td class="strong-cell">@m.Name</td><td>@m.Unit</td><td>@m.Quantity</td><td>@Money(m.Price)</td><td>@Money(m.Price * m.Quantity)</td></tr> }
           </tbody><tfoot><tr><td colspan="4">ИТОГО</td><td>@Money(TotalValue)</td></tr></tfoot></table></div>
         </div>
-        <div class="hint-panel"><b>Для защиты курсовой</b><span>Покажи, как добавляется материал, как меняется остаток после прихода и расхода, и как формируется отчёт.</span></div>
       }
 
 
@@ -153,10 +157,13 @@
     private string materialUnit = "шт.";
     private decimal materialPrice;
     private int materialMinimum;
+    // Количество при создании новой позиции; пустое поле означает начальный остаток 0.
+    private int? materialInitialQuantity;
     // Поля формы приходной или расходной операции.
     private string operationType = "Приход";
     private int selectedMaterial;
-    private int operationQuantity = 1;
+    // Nullable int позволяет отображать действительно пустое поле после сохранения.
+    private int? operationQuantity;
     private string operationNote = "";
     private bool error;
     private bool initialized;
@@ -201,12 +208,14 @@
     private void ClearMaterialForm()
     {
         editId = 0; materialName = ""; materialUnit = "шт."; materialPrice = 0; materialMinimum = 0;
+        materialInitialQuantity = null;
     }
     // Заполнить форму значениями выбранного материала.
     private void Edit(Material m)
     {
         editId = m.Id; materialName = m.Name; materialUnit = m.Unit;
-        materialPrice = m.Price; materialMinimum = m.MinQuantity; message = "";
+        materialPrice = m.Price; materialMinimum = m.MinQuantity;
+        materialInitialQuantity = null; message = "";
     }
     // Проверить поля и добавить либо обновить материал.
     private async Task SaveMaterial()
@@ -214,12 +223,22 @@
         string name = materialName.Trim();
         if (name.Length < 2) { Notify("Укажи название материала (не менее двух символов).", true); return; }
         if (materialPrice < 0 || materialMinimum < 0) { Notify("Цена и минимальный остаток не могут быть отрицательными.", true); return; }
+        if (editId == 0 && materialInitialQuantity < 0)
+        { Notify("Начальное количество не может быть отрицательным.", true); return; }
         if (data.Materials.Any(m => m.Id != editId && m.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
         { Notify("Такой материал уже существует.", true); return; }
         if (editId == 0)
         {
+            var startQuantity = materialInitialQuantity ?? 0;
             data.Materials.Add(new Material { Id = data.NextMaterialId++, Name = name,
-                Unit = materialUnit, Price = materialPrice, MinQuantity = materialMinimum, Quantity = 0 });
+                Unit = materialUnit, Price = materialPrice, MinQuantity = materialMinimum, Quantity = startQuantity });
+            // Первоначальное количество фиксируется в журнале, чтобы история и остатки совпадали.
+            if (startQuantity > 0)
+            {
+                data.Operations.Add(new StockOperation { Id = data.NextOperationId++,
+                    At = DateTime.Now, MaterialName = name, Type = "Начальный остаток",
+                    Quantity = startQuantity, BalanceAfter = startQuantity, Note = "Добавление материала" });
+            }
         }
         else
         {
@@ -227,8 +246,11 @@
             if (item == null) { Notify("Материал не найден.", true); return; }
             item.Name = name; item.Unit = materialUnit; item.Price = materialPrice; item.MinQuantity = materialMinimum;
         }
+        var resultMessage = editId == 0
+            ? "Материал добавлен. Начальное количество сохранено."
+            : "Изменения материала сохранены. Количество изменяется через приход и расход.";
         ClearMaterialForm();
-        Notify("Материал сохранён. Для увеличения остатка оформи приход.");
+        Notify(resultMessage);
         await Persist();
     }
     // Изменить остаток и добавить строку в журнал операций.
@@ -236,23 +258,29 @@
     {
         var item = data.Materials.FirstOrDefault(m => m.Id == selectedMaterial);
         if (item == null) { Notify("Сначала выбери материал.", true); return; }
-        if (operationQuantity <= 0) { Notify("Количество должно быть больше нуля.", true); return; }
-        if (operationType == "Расход" && operationQuantity > item.Quantity)
+        if (!operationQuantity.HasValue || operationQuantity.Value <= 0)
+        { Notify("Укажи количество больше нуля.", true); return; }
+        int quantity = operationQuantity.Value;
+        if (operationType == "Расход" && quantity > item.Quantity)
         { Notify($"Недостаточно материала на складе: доступно {item.Quantity} {item.Unit}.", true); return; }
-        try { item.Quantity = checked(item.Quantity + (operationType == "Приход" ? operationQuantity : -operationQuantity)); }
+        try { item.Quantity = checked(item.Quantity + (operationType == "Приход" ? quantity : -quantity)); }
         catch (OverflowException) { Notify("Слишком большое количество.", true); return; }
         data.Operations.Add(new StockOperation { Id = data.NextOperationId++, At = DateTime.Now,
-            MaterialName = item.Name, Type = operationType, Quantity = operationQuantity,
+            MaterialName = item.Name, Type = operationType, Quantity = quantity,
             BalanceAfter = item.Quantity, Note = operationNote.Trim() });
-        Notify($"Готово! {operationType}: {operationQuantity} {item.Unit}. Остаток: {item.Quantity}.");
-        operationQuantity = 1; operationNote = "";
+        Notify($"Готово! {operationType}: {quantity} {item.Unit}. Остаток: {item.Quantity}.");
+        // После успешного сохранения все поля ввода очищаются для следующей операции.
+        selectedMaterial = 0;
+        operationQuantity = null;
+        operationNote = "";
         await Persist();
     }
     // С согласия пользователя восстановить учебные данные.
     private async Task ResetDemo()
     {
         if (!await Js.InvokeAsync<bool>("matresursStorage.askReset")) return;
-        data = InventoryData.CreateDemo(); ClearMaterialForm(); selectedMaterial = 0; message = "";
+        data = InventoryData.CreateDemo(); ClearMaterialForm();
+        selectedMaterial = 0; operationQuantity = null; operationNote = ""; message = "";
         await Persist(); Go("home");
     }
 
