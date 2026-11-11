@@ -11,7 +11,7 @@
   <base href="/" />
 
   <!-- Внешний вид сайта: CSS-файл в русской папке «стили». -->
-  <link rel="stylesheet" href="стили/site.css?v=20261111-centered-dialogs-v2" />
+  <link rel="stylesheet" href="стили/site.css?v=20261111-native-dialogs-v3" />
 </head>
 <body>
   <!-- В этот элемент Blazor вставляет экран, написанный на C#. -->
@@ -28,6 +28,21 @@
   <script src="Скрипты( сохранение данных и скачивание отчётов)/storage.js"></script>
 
   <!-- Загрузка программы на C# (Blazor WebAssembly). -->
-  <script src="_framework/blazor.webassembly.js"></script>
+  <!-- Нативные диалоги выводятся в верхнем слое браузера через showModal(). -->
+  <script>
+    window.matresursDialogs = {
+      show: function (id) {
+        const dialog = document.getElementById(id);
+        if (dialog && !dialog.open) dialog.showModal();
+      },
+      close: function (id) {
+        const dialog = document.getElementById(id);
+        if (dialog && dialog.open) dialog.close();
+      }
+    };
+  </script>
+
+  <!-- Версия скрипта меняется вместе с приложением для обновления кэша. -->
+  <script src="_framework/blazor.webassembly.js?v=20261111-native-dialogs-v3"></script>
 </body>
 </html>

@@ -140,58 +140,57 @@
     </div>
   </main>
 
-  @* Диалоги расположены непосредственно в корне приложения, а не внутри таблиц и панелей. *@
-      @* ФОРМА РЕДАКТИРОВАНИЯ: открывается поверх страницы по центру экрана. *@
-      @if (tab == "materials" && editId != 0)
-      {
-        <div class="material-modal-backdrop" style="position:fixed !important;inset:0 !important;z-index:2147483000;display:flex !important;align-items:center !important;justify-content:center !important;padding:20px;min-height:100vh;min-height:100dvh;width:100%;overflow-y:auto;background:rgba(5,19,42,.76);backdrop-filter:blur(5px);">
-          <section class="material-modal" style="position:relative;display:block;flex-shrink:1;width:min(100%,570px);max-height:calc(100dvh - 40px);margin:auto;overflow-y:auto;background:#ffffff;border-radius:20px;border:1px solid #dce7f6;box-shadow:0 25px 90px rgba(0,15,43,.38);padding:28px;" role="dialog" aria-modal="true" aria-labelledby="edit-material-title">
-            <div class="material-modal-heading">
-              <div><span class="material-modal-kicker">СПРАВОЧНИК МАТЕРИАЛОВ</span><h2 id="edit-material-title">Изменить материал</h2><p>Отредактируй данные и нажми «Сохранить изменения».</p></div>
-              <button type="button" class="material-modal-close" aria-label="Закрыть окно редактирования" @onclick="CloseEdit">✕</button>
-            </div>
-            <div class="form-grid">
-              <label>Название<input @bind="editName" /></label>
-              <label>Единица измерения<select @bind="editUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label>
-              <label>Цена, ₽<input type="number" min="0" step="0.01" @bind="editPrice" /></label>
-              <label>Минимальный остаток<input type="number" min="0" step="1" @bind="editMinimum" /></label>
-            </div>
-            <p class="material-modal-tip">Количество на складе меняется через раздел «Приход и расход».</p>
-            @if (!string.IsNullOrWhiteSpace(modalMessage))
-            {
-              <div class="message error" role="alert">@modalMessage</div>
-            }
-            <div class="material-modal-actions">
-              <button type="button" class="outline-button" @onclick="CloseEdit">Отмена</button>
-              <button type="button" class="primary-button" @onclick="SaveEditedMaterial">Сохранить изменения</button>
-            </div>
-          </section>
-        </div>
-      }
 
-      @* ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ: отдельное заметное окно по центру, ничего не удаляет без подтверждения. *@
-      @if (tab == "materials" && pendingDeleteId != 0 && PendingDeleteMaterial != null)
-      {
-        <div class="material-modal-backdrop" style="position:fixed !important;inset:0 !important;z-index:2147483000;display:flex !important;align-items:center !important;justify-content:center !important;padding:20px;min-height:100vh;min-height:100dvh;width:100%;overflow-y:auto;background:rgba(5,19,42,.76);backdrop-filter:blur(5px);">
-          <section class="material-modal material-modal-delete" style="position:relative;display:block;flex-shrink:1;width:min(100%,570px);max-height:calc(100dvh - 40px);margin:auto;overflow-y:auto;background:#ffffff;border-radius:20px;border:1px solid #dce7f6;box-shadow:0 25px 90px rgba(0,15,43,.38);padding:28px;" role="alertdialog" aria-modal="true"
-                   aria-labelledby="delete-material-title" aria-describedby="delete-material-description">
-            <div class="material-modal-heading">
-              <div><span class="material-modal-kicker danger">ПОДТВЕРЖДЕНИЕ ДЕЙСТВИЯ</span><h2 id="delete-material-title">Удалить материал?</h2></div>
-              <button type="button" class="material-modal-close" aria-label="Закрыть окно удаления" @onclick="CancelDelete">✕</button>
-            </div>
-            <p id="delete-material-description" class="material-delete-description">
-              Материал <strong>«@(PendingDeleteMaterial?.Name)»</strong> будет удалён из справочника и отчётов.
-              Остаток на складе: <strong>@(PendingDeleteMaterial?.Quantity) @(PendingDeleteMaterial?.Unit)</strong>.
-            </p>
-            <div class="material-delete-warning">Записи о прежних приходах и расходах сохранятся в истории.</div>
-            <div class="material-modal-actions">
-              <button type="button" class="outline-button" @onclick="CancelDelete">Отмена</button>
-              <button type="button" class="material-confirm-delete" @onclick="ConfirmDeleteMaterial">Да, удалить</button>
-            </div>
-          </section>
+  @* Нативные диалоговые окна браузера появляются поверх страницы, независимо от прокрутки. *@
+  @if (tab == "materials")
+  {
+    <dialog id="material-edit-dialog" class="material-native-dialog"
+            style="position:fixed;inset:0;margin:auto;width:min(570px,calc(100vw - 28px));max-height:calc(100dvh - 30px);padding:0;border:0;border-radius:20px;background:transparent;"
+            @onclose="OnEditDialogClosed">
+      <section class="material-modal" role="document" aria-labelledby="edit-material-title">
+        <div class="material-modal-heading">
+          <div><span class="material-modal-kicker">СПРАВОЧНИК МАТЕРИАЛОВ</span><h2 id="edit-material-title">Изменить материал</h2><p>Измени данные и сохрани результат.</p></div>
+          <button type="button" class="material-modal-close" aria-label="Закрыть окно редактирования" @onclick="CloseEdit">✕</button>
         </div>
-      }
+        <div class="form-grid">
+          <label>Название<input @bind="editName" /></label>
+          <label>Единица измерения<select @bind="editUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label>
+          <label>Цена, ₽<input type="number" min="0" step="0.01" @bind="editPrice" /></label>
+          <label>Минимальный остаток<input type="number" min="0" step="1" @bind="editMinimum" /></label>
+        </div>
+        <p class="material-modal-tip">Количество на складе меняется через раздел «Приход и расход».</p>
+        @if (!string.IsNullOrWhiteSpace(modalMessage))
+        {
+          <div class="message error" role="alert">@modalMessage</div>
+        }
+        <div class="material-modal-actions">
+          <button type="button" class="outline-button" @onclick="CloseEdit">Отмена</button>
+          <button type="button" class="primary-button" @onclick="SaveEditedMaterial">Сохранить изменения</button>
+        </div>
+      </section>
+    </dialog>
 
+    <dialog id="material-delete-dialog" class="material-native-dialog"
+            style="position:fixed;inset:0;margin:auto;width:min(570px,calc(100vw - 28px));max-height:calc(100dvh - 30px);padding:0;border:0;border-radius:20px;background:transparent;"
+            @onclose="OnDeleteDialogClosed">
+      <section class="material-modal material-modal-delete" role="document"
+               aria-labelledby="delete-material-title" aria-describedby="delete-material-description">
+        <div class="material-modal-heading">
+          <div><span class="material-modal-kicker danger">ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ</span><h2 id="delete-material-title">Удалить материал?</h2></div>
+          <button type="button" class="material-modal-close" aria-label="Закрыть окно удаления" @onclick="CancelDelete">✕</button>
+        </div>
+        <p id="delete-material-description" class="material-delete-description">
+          Материал <strong>«@(PendingDeleteMaterial?.Name)»</strong> будет удалён из справочника и отчётов.
+          Остаток: <strong>@(PendingDeleteMaterial?.Quantity) @(PendingDeleteMaterial?.Unit)</strong>.
+        </p>
+        <div class="material-delete-warning">История прежних приходов и расходов сохранится.</div>
+        <div class="material-modal-actions">
+          <button type="button" class="outline-button" @onclick="CancelDelete">Отмена</button>
+          <button type="button" class="material-confirm-delete" @onclick="ConfirmDeleteMaterial">Да, удалить</button>
+        </div>
+      </section>
+    </dialog>
+  }
 
 </div>
 
@@ -274,11 +273,12 @@
         materialName = ""; materialUnit = "шт."; materialPrice = 0; materialMinimum = 0;
         materialInitialQuantity = null;
     }
-    // Открываем редактирование в центре страницы — форма создания остаётся пустой.
-    private void Edit(Material material)
+    // Открывает нативный модальный диалог браузера поверх всей страницы.
+    private async Task Edit(Material material)
     {
         var current = data.Materials.FirstOrDefault(m => m.Id == material.Id);
         if (current == null) { Notify("Материал не найден.", true); return; }
+
         pendingDeleteId = 0;
         editId = current.Id;
         editName = current.Name;
@@ -286,15 +286,25 @@
         editPrice = current.Price;
         editMinimum = current.MinQuantity;
         modalMessage = "";
+
+        // dialog.showModal() перемещает окно в верхний слой интерфейса браузера.
+        await Js.InvokeVoidAsync("matresursDialogs.show", "material-edit-dialog");
     }
 
-    private void CloseEdit()
+    private async Task CloseEdit()
+    {
+        await Js.InvokeVoidAsync("matresursDialogs.close", "material-edit-dialog");
+        OnEditDialogClosed();
+    }
+
+    // Срабатывает также при закрытии диалога клавишей Esc.
+    private void OnEditDialogClosed()
     {
         editId = 0;
         modalMessage = "";
     }
 
-    // Сохраняем изменения из модального окна, не меняя учётный остаток материала.
+    // Сохраняем название, цену, единицу и минимум без изменения складского остатка.
     private async Task SaveEditedMaterial()
     {
         var current = data.Materials.FirstOrDefault(m => m.Id == editId);
@@ -320,33 +330,40 @@
             modalMessage = "Материал с таким названием уже есть.";
             return;
         }
+
         current.Name = name;
         current.Unit = editUnit;
         current.Price = editPrice;
         current.MinQuantity = editMinimum;
-
-        CloseEdit();
+        await CloseEdit();
         Notify($"Материал «{current.Name}» успешно изменён.");
         await Persist();
     }
 
-    // Первое нажатие «Удалить» только открывает окно с запросом подтверждения.
-    private void DeleteMaterial(Material material)
+    // Первое нажатие «Удалить» только открывает окно подтверждения.
+    private async Task DeleteMaterial(Material material)
     {
         var current = data.Materials.FirstOrDefault(m => m.Id == material.Id);
         if (current == null) { Notify("Материал не найден.", true); return; }
         editId = 0;
         modalMessage = "";
         pendingDeleteId = current.Id;
+        await Js.InvokeVoidAsync("matresursDialogs.show", "material-delete-dialog");
     }
 
-    private void CancelDelete() => pendingDeleteId = 0;
+    private async Task CancelDelete()
+    {
+        await Js.InvokeVoidAsync("matresursDialogs.close", "material-delete-dialog");
+        OnDeleteDialogClosed();
+    }
 
-    // Удаляем только после явного нажатия «Да, удалить». Журнал операций не очищаем.
+    private void OnDeleteDialogClosed() => pendingDeleteId = 0;
+
+    // Удаляем только после явного подтверждения. Журнал операций не очищаем.
     private async Task ConfirmDeleteMaterial()
     {
         int id = pendingDeleteId;
-        pendingDeleteId = 0;
+        await CancelDelete();
         var current = data.Materials.FirstOrDefault(m => m.Id == id);
         if (current == null) { Notify("Материал уже удалён или не найден.", true); return; }
 

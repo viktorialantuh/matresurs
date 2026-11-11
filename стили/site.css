@@ -569,3 +569,35 @@ td button:hover { background: #dbeaff; }
   z-index: 1;
   background: #fff;
 }
+
+
+/* Надёжное модальное окно: браузер помещает <dialog>.showModal() в top-layer.
+   Оно не может оказаться между формой добавления и таблицей. */
+.material-native-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  border: 0;
+  padding: 0;
+  width: min(570px, calc(100vw - 28px));
+  max-height: calc(100dvh - 30px);
+  overflow: auto;
+  background: transparent;
+  border-radius: 20px;
+  box-shadow: 0 25px 80px rgba(5, 23, 52, .37);
+}
+.material-native-dialog::backdrop {
+  background: rgba(6, 22, 50, .78);
+  backdrop-filter: blur(5px);
+}
+.material-native-dialog .material-modal {
+  width: 100%;
+  max-height: none;
+  box-shadow: none;
+  margin: 0;
+  border: 0;
+}
+@media (max-width: 620px) {
+  .material-native-dialog { width: calc(100vw - 20px); }
+  .material-native-dialog .material-modal { padding: 19px; }
+}
