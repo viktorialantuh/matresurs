@@ -2,7 +2,7 @@
 @* Таблица остатков: показывается на главной и в разделе «Материалы». *@
 <div class="table-wrap">
   <table>
-    @* Заголовки столбцов и дополнительная кнопка «Изменить». *@
+    @* Заголовки столбцов и кнопки изменения / удаления материала. *@
     <thead><tr><th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена за ед.</th><th>Состояние</th>@if (AllowEdit) { <th>Действие</th> }</tr></thead>
     <tbody>
       @* Обходим материалы в алфавитном порядке. *@
@@ -14,7 +14,15 @@
           <td>@item.Quantity</td>
           <td>@item.Price.ToString("N2", new CultureInfo("ru-RU")) ₽</td>
           <td><span class="@(item.Quantity <= item.MinQuantity ? "status status-low" : "status")">@(item.Quantity <= item.MinQuantity ? "Мало" : "В наличии")</span></td>
-          @if (AllowEdit) { <td><button @onclick="() => OnEdit.InvokeAsync(item)">Изменить</button></td> }
+          @if (AllowEdit)
+          {
+            <td>
+              <div class="table-actions">
+                <button type="button" @onclick="() => OnEdit.InvokeAsync(item)">Изменить</button>
+                <button type="button" class="delete-button" @onclick="() => OnDelete.InvokeAsync(item)">Удалить</button>
+              </div>
+            </td>
+          }
         </tr>
       }
       @if (!Items.Any()) { <tr><td colspan="6">Материалы не найдены.</td></tr> }
@@ -28,4 +36,6 @@
   [Parameter] public bool AllowEdit { get; set; }
   // Событие нажатия на кнопку изменения строки.
   [Parameter] public EventCallback<Material> OnEdit { get; set; }
+  // Событие удаления материала с подтверждением в родительском компоненте.
+  [Parameter] public EventCallback<Material> OnDelete { get; set; }
 }

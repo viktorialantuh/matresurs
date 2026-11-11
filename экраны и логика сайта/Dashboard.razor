@@ -91,7 +91,7 @@
           <div class="form-actions"><button class="primary-button" @onclick="SaveMaterial">@(editId == 0 ? "Добавить материал" : "Сохранить изменения")</button>@if (editId != 0) { <button class="outline-button" @onclick="ClearMaterialForm">Отмена</button> }</div>
           @if (!string.IsNullOrWhiteSpace(message)) { <div class="@MessageClass">@message</div> }
         </div>
-        <div class="panel"><div class="panel-title-row"><div><h2>Список материалов</h2><p>Количество автоматически меняется после операций</p></div><input class="search" placeholder="Поиск материала..." @bind="search" @bind:event="oninput" /></div><MaterialTable Items="FilteredMaterials" AllowEdit="true" OnEdit="Edit" /></div>
+        <div class="panel"><div class="panel-title-row"><div><h2>Список материалов</h2><p>Количество автоматически меняется после операций</p></div><input class="search" placeholder="Поиск материала..." @bind="search" @bind:event="oninput" /></div><MaterialTable Items="FilteredMaterials" AllowEdit="true" OnEdit="Edit" OnDelete="DeleteMaterial" /></div>
       }
       else if (tab == "operation")
       {
@@ -217,6 +217,34 @@
         materialPrice = m.Price; materialMinimum = m.MinQuantity;
         materialInitialQuantity = null; message = "";
     }
+    // Удалить материал только после подтверждения. Записи журнала сохраняются.
+    private async Task DeleteMaterial(Material material)
+    {
+        var current = data.Materials.FirstOrDefault(m => m.Id == material.Id);
+        if (current == null)
+        {
+            Notify("Материал уже удалён или не найден.", true);
+            return;
+        }
+
+        bool confirmed = await Js.InvokeAsync<bool>("confirm",
+            $"Удалить материал «{current.Name}» (остаток: {current.Quantity} {current.Unit})?\n" +
+            "Материал исчезнет из справочника и отчётов, но история операций сохранится.");
+
+        if (!confirmed) return;
+
+        // Проверяем по идентификатору повторно, чтобы не удалить другой материал.
+        current = data.Materials.FirstOrDefault(m => m.Id == material.Id);
+        if (current == null) return;
+
+        data.Materials.Remove(current);
+        if (selectedMaterial == current.Id) selectedMaterial = 0;
+        if (editId == current.Id) ClearMaterialForm();
+
+        Notify($"Материал «{current.Name}» удалён. История операций сохранена.");
+        await Persist();
+    }
+
     // Проверить поля и добавить либо обновить материал.
     private async Task SaveMaterial()
     {

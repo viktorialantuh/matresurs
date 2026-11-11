@@ -258,6 +258,15 @@ td button {
   border-radius: 8px; color: var(--navy); font-size: 12px; font-weight: 700;
 }
 td button:hover { background: #dbeaff; }
+/* Действия со строкой: удаление выделено красным, чтобы не спутать с редактированием. */
+.table-actions { display: flex; gap: 8px; flex-wrap: nowrap; align-items: center; }
+.table-actions .delete-button {
+  background: #fff0ed;
+  color: #ae3e32;
+  border-color: #f6cfc7;
+}
+.table-actions .delete-button:hover { background: #ffe2dd; }
+.table-actions .delete-button:focus-visible { outline-color: #d65c4c; }
 .status {
   display: inline-flex; align-items: center; border-radius: 20px;
   padding: 7px 11px; background: #e4f7ed; color: #087a51;
