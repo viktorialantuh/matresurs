@@ -3,7 +3,7 @@
 
 <div class="app-shell">
   <aside class="sidebar">
-    <div class="brand"><span class="brand-icon">▦</span><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
+    <div class="brand"><span class="brand-icon">▦</span><div><b>@theme.Title</b><small>Учёт материалов</small></div></div>
     <div class="side-section">РАЗДЕЛЫ</div>
     <nav class="side-nav" aria-label="Разделы системы">
       <button class="@(tab == "home" ? "selected" : "")" @onclick='() => Go("home")'><span>⌂</span> Главная</button>
@@ -11,6 +11,7 @@
       <button class="@(tab == "operation" ? "selected" : "")" @onclick='() => Go("operation")'><span>⇄</span> Приход и расход</button>
       <button class="@(tab == "history" ? "selected" : "")" @onclick='() => Go("history")'><span>☷</span> История</button>
       <button class="@(tab == "report" ? "selected" : "")" @onclick='() => Go("report")'><span>▤</span> Отчёт</button>
+      <button class="@(tab == "appearance" ? "selected" : "")" @onclick='() => Go("appearance")'><span>⚙</span> Оформление</button>
     </nav>
     <div class="sidebar-note"><span class="dot"></span> Учебная информационная система <p>Проект на C# · Blazor WebAssembly</p></div>
   </aside>
@@ -84,6 +85,49 @@
         </div>
         <div class="hint-panel"><b>Для защиты курсовой</b><span>Покажи, как добавляется материал, как меняется остаток после прихода и расхода, и как формируется отчёт.</span></div>
       }
+
+      else if (tab == "appearance")
+      {
+        <div class="page-top"><div><div class="eyebrow">РЕДАКТОР БЕЗ КОДА</div><h1>Оформление сайта</h1><p>Выбирай цвета, название и стиль. Результат сразу виден на всех страницах.</p></div></div>
+        <div class="panel theme-panel">
+          <div class="panel-title-row"><div><h2>Готовые темы</h2><p>Нажми на вариант, чтобы посмотреть его на сайте.</p></div></div>
+          <div class="theme-presets">
+            <button type="button" @onclick='() => ChooseTheme("blue")'><span class="theme-preset-icon preset-blue"></span><span><b>Классика</b><small>Синий и бирюза</small></span></button>
+            <button type="button" @onclick='() => ChooseTheme("mint")'><span class="theme-preset-icon preset-mint"></span><span><b>Мятная</b><small>Зелёные акценты</small></span></button>
+            <button type="button" @onclick='() => ChooseTheme("purple")'><span class="theme-preset-icon preset-purple"></span><span><b>Лавандовая</b><small>Фиолетовая палитра</small></span></button>
+            <button type="button" @onclick='() => ChooseTheme("warm")'><span class="theme-preset-icon preset-warm"></span><span><b>Тёплая</b><small>Оранжевые акценты</small></span></button>
+          </div>
+        </div>
+        <div class="panel theme-panel">
+          <div class="panel-title-row"><div><h2>Свои цвета</h2><p>Изменения применяются сразу. Пока это только предпросмотр в твоём браузере.</p></div></div>
+          <div class="theme-colors">
+            <label><span>Основной цвет</span><input type="color" @bind="theme.Primary" @bind:event="oninput" @bind:after="PreviewTheme" /><small>@theme.Primary</small></label>
+            <label><span>Цвет акцентов</span><input type="color" @bind="theme.Accent" @bind:event="oninput" @bind:after="PreviewTheme" /><small>@theme.Accent</small></label>
+            <label><span>Боковое меню</span><input type="color" @bind="theme.Sidebar" @bind:event="oninput" @bind:after="PreviewTheme" /><small>@theme.Sidebar</small></label>
+            <label><span>Фон страниц</span><input type="color" @bind="theme.Background" @bind:event="oninput" @bind:after="PreviewTheme" /><small>@theme.Background</small></label>
+          </div>
+          <div class="form-grid theme-options">
+            <label>Название сайта
+              <input maxlength="48" @bind="theme.Title" @bind:event="oninput" @bind:after="PreviewTheme" placeholder="МатРесурс" />
+            </label>
+            <label>Шрифт
+              <select @bind="theme.Font" @bind:after="PreviewTheme">
+                <option value="system">Современный</option>
+                <option value="arial">Классический</option>
+                <option value="georgia">С засечками</option>
+              </select>
+            </label>
+            <label>Скругление углов: @theme.Radius px
+              <input type="range" min="8" max="26" step="1" @bind="theme.Radius" @bind:event="oninput" @bind:after="PreviewTheme" />
+            </label>
+          </div>
+          <div class="theme-publication">
+            <div><b>Сделать оформление общим для всех</b><p>Откроется GitHub с готовой заявкой. В аккаунте <strong>viktorialantuh</strong> нажми <strong>Submit new issue</strong>. GitHub сам опубликует новый дизайн, без кода и загрузки файлов.</p></div>
+            <div class="theme-publication-actions"><a class="primary-button" href="@PublishThemeUrl" target="_blank" rel="noopener noreferrer">Опубликовать для всех ↗</a><button class="outline-button" @onclick="RestorePublishedTheme">Отменить предпросмотр</button></div>
+            <p class="theme-warning">Только владелец репозитория может опубликовать изменения. После подтверждения проверь вкладку Actions: обновление появится на сайте после успешной публикации. Не добавляй в название сайта личные данные или пароли.</p>
+          </div>
+        </div>
+      }
       <footer>МатРесурс · учебная информационная система · C# / Blazor WebAssembly <button @onclick="ResetDemo">Сбросить демонстрацию</button></footer>
     </div>
   </main>
@@ -91,6 +135,8 @@
 
 @code {
     private InventoryData data = InventoryData.CreateDemo();
+    private SiteTheme theme = new();
+    private SiteTheme publishedTheme = new();
     private string tab = "home";
     private string message = "";
     private string search = "";
@@ -124,6 +170,12 @@
             }
         }
         catch (Exception) { /* Браузер может блокировать localStorage. Демо всё равно работает. */ }
+        try
+        {
+            var savedTheme = await Js.InvokeAsync<SiteTheme>("matresursTheme.load");
+            if (savedTheme != null) { theme = savedTheme; publishedTheme = savedTheme.Copy(); }
+        }
+        catch (Exception) { /* Используем оформление по умолчанию. */ }
         initialized = true;
         StateHasChanged();
     }
@@ -189,6 +241,41 @@
         if (!await Js.InvokeAsync<bool>("matresursStorage.askReset")) return;
         data = InventoryData.CreateDemo(); ClearMaterialForm(); selectedMaterial = 0; message = "";
         await Persist(); Go("home");
+    }
+
+    private async Task PreviewTheme()
+    {
+        try { await Js.InvokeVoidAsync("matresursTheme.preview", theme); }
+        catch (Exception) { /* Используем оформление по умолчанию. */ }
+    }
+    private async Task ChooseTheme(string preset)
+    {
+        theme = preset switch
+        {
+            "mint" => new SiteTheme { Title = theme.Title, Primary = "#129a88", Accent = "#16b49b", Sidebar = "#133e45", Background = "#effbf8", Radius = 16, Font = theme.Font },
+            "purple" => new SiteTheme { Title = theme.Title, Primary = "#7755e8", Accent = "#bb73dc", Sidebar = "#251d4c", Background = "#f6f3ff", Radius = 20, Font = theme.Font },
+            "warm" => new SiteTheme { Title = theme.Title, Primary = "#df7537", Accent = "#eb9e4d", Sidebar = "#3d2b29", Background = "#fff9f2", Radius = 14, Font = theme.Font },
+            _ => new SiteTheme { Title = theme.Title, Font = theme.Font }
+        };
+        await PreviewTheme();
+    }
+    private async Task RestorePublishedTheme()
+    {
+        theme = publishedTheme.Copy();
+        await PreviewTheme();
+    }
+    private string PublishThemeUrl
+    {
+        get
+        {
+            var safeTheme = theme.Copy();
+            if (string.IsNullOrWhiteSpace(safeTheme.Title)) safeTheme.Title = "МатРесурс";
+            safeTheme.Title = safeTheme.Title.Trim();
+            var body = "MATRESURS_THEME_V1\n" + JsonSerializer.Serialize(safeTheme);
+            return "https://github.com/viktorialantuh/matresurs/issues/new?title="
+                + Uri.EscapeDataString("[MatResurs theme] Новое оформление")
+                + "&body=" + Uri.EscapeDataString(body);
+        }
     }
     private static string Csv(string s) => "\"" + s.Replace("\"", "\"\"") + "\"";
     private async Task ExportReport()
