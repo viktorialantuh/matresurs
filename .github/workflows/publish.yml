@@ -54,6 +54,10 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: publish/wwwroot
+      # Даём GitHub время зарегистрировать загруженный архив перед публикацией.
+      - name: Дождаться регистрации файлов
+        run: sleep 12
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
