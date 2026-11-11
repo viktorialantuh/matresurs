@@ -1,0 +1,25 @@
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена за ед.</th><th>Состояние</th>@if (AllowEdit) { <th>Действие</th> }</tr></thead>
+    <tbody>
+      @foreach (var item in Items.OrderBy(m => m.Name))
+      {
+        <tr>
+          <td class="strong-cell">@item.Name</td>
+          <td>@item.Unit</td>
+          <td>@item.Quantity</td>
+          <td>@item.Price.ToString("N2", new CultureInfo("ru-RU")) ₽</td>
+          <td><span class="@(item.Quantity <= item.MinQuantity ? "status status-low" : "status")">@(item.Quantity <= item.MinQuantity ? "Мало" : "В наличии")</span></td>
+          @if (AllowEdit) { <td><button @onclick="() => OnEdit.InvokeAsync(item)">Изменить</button></td> }
+        </tr>
+      }
+      @if (!Items.Any()) { <tr><td colspan="6">Материалы не найдены.</td></tr> }
+    </tbody>
+  </table>
+</div>
+
+@code {
+  [Parameter] public List<Material> Items { get; set; } = new();
+  [Parameter] public bool AllowEdit { get; set; }
+  [Parameter] public EventCallback<Material> OnEdit { get; set; }
+}

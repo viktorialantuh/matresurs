@@ -1,0 +1,202 @@
+@inject IJSRuntime Js
+@using System.Text
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">▦</span><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
+    <div class="side-section">РАЗДЕЛЫ</div>
+    <nav class="side-nav" aria-label="Разделы системы">
+      <button class="@(tab == "home" ? "selected" : "")" @onclick='() => Go("home")'><span>⌂</span> Главная</button>
+      <button class="@(tab == "materials" ? "selected" : "")" @onclick='() => Go("materials")'><span>▣</span> Материалы</button>
+      <button class="@(tab == "operation" ? "selected" : "")" @onclick='() => Go("operation")'><span>⇄</span> Приход и расход</button>
+      <button class="@(tab == "history" ? "selected" : "")" @onclick='() => Go("history")'><span>☷</span> История</button>
+      <button class="@(tab == "report" ? "selected" : "")" @onclick='() => Go("report")'><span>▤</span> Отчёт</button>
+    </nav>
+    <div class="sidebar-note"><span class="dot"></span> Учебная информационная система <p>Проект на C# · Blazor WebAssembly</p></div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar"><span>ИС учёта материальных ресурсов предприятия</span><span class="user-pill">● Демо-режим</span></header>
+    <div class="content">
+      @if (tab == "home")
+      {
+        <div class="page-top"><div><div class="eyebrow">ОБЗОР СИСТЕМЫ</div><h1>Главная</h1><p>Все важные данные о материалах в одном месте.</p></div><button class="primary-button" @onclick='() => Go("operation")'>+ Новая операция</button></div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-label">Наименований</div><div class="stat-number">@data.Materials.Count</div><div class="stat-help">В справочнике материалов</div></div>
+          <div class="stat-card"><div class="stat-icon violet">▥</div><div class="stat-label">Единиц на складе</div><div class="stat-number">@data.Materials.Sum(m => m.Quantity)</div><div class="stat-help">Текущий остаток</div></div>
+          <div class="stat-card"><div class="stat-icon green">₽</div><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div><div class="stat-help">По учётным ценам</div></div>
+          <div class="stat-card"><div class="stat-icon orange">!</div><div class="stat-label">Мало на складе</div><div class="stat-number">@LowCount</div><div class="stat-help">Требуют внимания</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title-row"><div><h2>Остатки материалов</h2><p>Актуальные сведения по всем позициям</p></div><button class="quiet-button" @onclick='() => Go("materials")'>Все материалы →</button></div>
+          <MaterialTable Items="data.Materials" AllowEdit="false" />
+        </div>
+        <div class="hint-panel"><b>Как пользоваться?</b><span>1. Добавь материал → 2. Оформи приход или расход → 3. Посмотри остатки и отчёт.</span></div>
+      }
+      else if (tab == "materials")
+      {
+        <div class="page-top"><div><div class="eyebrow">СПРАВОЧНИК</div><h1>Материалы</h1><p>Добавляй материалы и отслеживай их количество.</p></div></div>
+        <div class="panel form-panel"><h2>@(editId == 0 ? "Добавить материал" : "Изменить материал")</h2>
+          <div class="form-grid">
+            <label>Название<input placeholder="Например: Бумага А4" @bind="materialName" /></label>
+            <label>Единица измерения<select @bind="materialUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label>
+            <label>Цена, ₽<input type="number" min="0" step="0.01" @bind="materialPrice" /></label>
+            <label>Минимальный остаток<input type="number" min="0" step="1" @bind="materialMinimum" /></label>
+          </div>
+          <div class="form-actions"><button class="primary-button" @onclick="SaveMaterial">@(editId == 0 ? "Добавить материал" : "Сохранить изменения")</button>@if (editId != 0) { <button class="outline-button" @onclick="ClearMaterialForm">Отмена</button> }</div>
+          @if (!string.IsNullOrWhiteSpace(message)) { <div class="@MessageClass">@message</div> }
+        </div>
+        <div class="panel"><div class="panel-title-row"><div><h2>Список материалов</h2><p>Количество автоматически меняется после операций</p></div><input class="search" placeholder="Поиск материала..." @bind="search" @bind:event="oninput" /></div><MaterialTable Items="FilteredMaterials" AllowEdit="true" OnEdit="Edit" /></div>
+      }
+      else if (tab == "operation")
+      {
+        <div class="page-top"><div><div class="eyebrow">СКЛАДСКОЙ УЧЁТ</div><h1>Приход и расход</h1><p>Оформи поступление или выдачу со склада.</p></div></div>
+        <div class="panel form-panel narrow-panel"><h2>Новая операция</h2>
+          <div class="type-switch"><button class="@(operationType == "Приход" ? "active" : "")" @onclick='() => operationType = "Приход"'>↓ Приход</button><button class="@(operationType == "Расход" ? "active" : "")" @onclick='() => operationType = "Расход"'>↑ Расход</button></div>
+          <div class="form-grid single">
+            <label>Материал<select @bind="selectedMaterial"><option value="0">Выбери материал</option>@foreach (var item in data.Materials.OrderBy(m => m.Name)) { <option value="@item.Id">@item.Name (@item.Quantity @item.Unit)</option> }</select></label>
+            <label>Количество<input type="number" min="1" step="1" @bind="operationQuantity" /></label>
+            <label>Комментарий (необязательно)<input placeholder="Например: Для отдела снабжения" @bind="operationNote" /></label>
+          </div>
+          <button class="primary-button" @onclick="MakeOperation">Сохранить операцию</button>
+          @if (!string.IsNullOrWhiteSpace(message)) { <div class="@MessageClass">@message</div> }
+          <div class="inline-tip">Важно: система не позволяет списать больше, чем есть на складе.</div>
+        </div>
+      }
+      else if (tab == "history")
+      {
+        <div class="page-top"><div><div class="eyebrow">ЖУРНАЛ</div><h1>История операций</h1><p>Все поступления и выдачи с датой и остатком после операции.</p></div></div>
+        <div class="panel"><div class="panel-title-row"><h2>Журнал движений</h2><span class="subtle">Всего записей: @data.Operations.Count</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Дата</th><th>Материал</th><th>Операция</th><th>Количество</th><th>Остаток</th><th>Комментарий</th></tr></thead><tbody>
+            @foreach(var op in data.Operations.OrderByDescending(o => o.At).ThenByDescending(o => o.Id))
+            { <tr><td>@op.At.ToString("dd.MM.yyyy HH:mm")</td><td class="strong-cell">@op.MaterialName</td><td><span class="@(op.Type == "Расход" ? "status status-expense" : "status status-income")">@op.Type</span></td><td>@op.Quantity</td><td>@op.BalanceAfter</td><td>@op.Note</td></tr> }
+          </tbody></table></div>
+        </div>
+      }
+      else if (tab == "report")
+      {
+        <div class="page-top"><div><div class="eyebrow">АНАЛИТИКА</div><h1>Отчёт по остаткам</h1><p>Сводная стоимость материалов и список товаров.</p></div><button class="primary-button" @onclick="ExportReport">↓ Скачать CSV</button></div>
+        <div class="stat-grid two"><div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-label">Всего позиций</div><div class="stat-number">@data.Materials.Count</div></div><div class="stat-card"><div class="stat-icon green">₽</div><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div></div></div>
+        <div class="panel"><div class="panel-title-row"><h2>Ведомость остатков</h2><span class="subtle">Дата: @DateTime.Now.ToString("dd.MM.yyyy")</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена</th><th>Стоимость</th></tr></thead><tbody>
+            @foreach (var m in data.Materials.OrderBy(m => m.Name)) { <tr><td class="strong-cell">@m.Name</td><td>@m.Unit</td><td>@m.Quantity</td><td>@Money(m.Price)</td><td>@Money(m.Price * m.Quantity)</td></tr> }
+          </tbody><tfoot><tr><td colspan="4">ИТОГО</td><td>@Money(TotalValue)</td></tr></tfoot></table></div>
+        </div>
+        <div class="hint-panel"><b>Для защиты курсовой</b><span>Покажи, как добавляется материал, как меняется остаток после прихода и расхода, и как формируется отчёт.</span></div>
+      }
+      <footer>МатРесурс · учебная информационная система · C# / Blazor WebAssembly <button @onclick="ResetDemo">Сбросить демонстрацию</button></footer>
+    </div>
+  </main>
+</div>
+
+@code {
+    private InventoryData data = InventoryData.CreateDemo();
+    private string tab = "home";
+    private string message = "";
+    private string search = "";
+    private int editId;
+    private string materialName = "";
+    private string materialUnit = "шт.";
+    private decimal materialPrice;
+    private int materialMinimum;
+    private string operationType = "Приход";
+    private int selectedMaterial;
+    private int operationQuantity = 1;
+    private string operationNote = "";
+    private bool error;
+    private bool initialized;
+    private decimal TotalValue => data.Materials.Sum(m => m.Price * m.Quantity);
+    private int LowCount => data.Materials.Count(m => m.Quantity <= m.MinQuantity);
+    private List<Material> FilteredMaterials => data.Materials.Where(m => m.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+    private string MessageClass => error ? "message error" : "message success";
+    private static string Money(decimal v) => v.ToString("N2", new CultureInfo("ru-RU")) + " ₽";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        try
+        {
+            var saved = await Js.InvokeAsync<string?>("matresursStorage.load");
+            if (!string.IsNullOrEmpty(saved))
+            {
+                var loaded = JsonSerializer.Deserialize<InventoryData>(saved);
+                if (loaded?.Materials != null && loaded.Operations != null) data = loaded;
+            }
+        }
+        catch (Exception) { /* Браузер может блокировать localStorage. Демо всё равно работает. */ }
+        initialized = true;
+        StateHasChanged();
+    }
+
+    private void Go(string value) { tab = value; message = ""; search = ""; }
+    private void Notify(string value, bool isError = false) { message = value; error = isError; }
+    private async Task Persist()
+    {
+        if (!initialized) return;
+        try { await Js.InvokeVoidAsync("matresursStorage.save", JsonSerializer.Serialize(data)); }
+        catch (Exception) { Notify("В этом браузере сохранение запрещено. Данные доступны до обновления страницы.", true); }
+    }
+
+    private void ClearMaterialForm()
+    {
+        editId = 0; materialName = ""; materialUnit = "шт."; materialPrice = 0; materialMinimum = 0;
+    }
+    private void Edit(Material m)
+    {
+        editId = m.Id; materialName = m.Name; materialUnit = m.Unit;
+        materialPrice = m.Price; materialMinimum = m.MinQuantity; message = "";
+    }
+    private async Task SaveMaterial()
+    {
+        string name = materialName.Trim();
+        if (name.Length < 2) { Notify("Укажи название материала (не менее двух символов).", true); return; }
+        if (materialPrice < 0 || materialMinimum < 0) { Notify("Цена и минимальный остаток не могут быть отрицательными.", true); return; }
+        if (data.Materials.Any(m => m.Id != editId && m.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        { Notify("Такой материал уже существует.", true); return; }
+        if (editId == 0)
+        {
+            data.Materials.Add(new Material { Id = data.NextMaterialId++, Name = name,
+                Unit = materialUnit, Price = materialPrice, MinQuantity = materialMinimum, Quantity = 0 });
+        }
+        else
+        {
+            var item = data.Materials.FirstOrDefault(m => m.Id == editId);
+            if (item == null) { Notify("Материал не найден.", true); return; }
+            item.Name = name; item.Unit = materialUnit; item.Price = materialPrice; item.MinQuantity = materialMinimum;
+        }
+        ClearMaterialForm();
+        Notify("Материал сохранён. Для увеличения остатка оформи приход.");
+        await Persist();
+    }
+    private async Task MakeOperation()
+    {
+        var item = data.Materials.FirstOrDefault(m => m.Id == selectedMaterial);
+        if (item == null) { Notify("Сначала выбери материал.", true); return; }
+        if (operationQuantity <= 0) { Notify("Количество должно быть больше нуля.", true); return; }
+        if (operationType == "Расход" && operationQuantity > item.Quantity)
+        { Notify($"Недостаточно материала на складе: доступно {item.Quantity} {item.Unit}.", true); return; }
+        try { item.Quantity = checked(item.Quantity + (operationType == "Приход" ? operationQuantity : -operationQuantity)); }
+        catch (OverflowException) { Notify("Слишком большое количество.", true); return; }
+        data.Operations.Add(new StockOperation { Id = data.NextOperationId++, At = DateTime.Now,
+            MaterialName = item.Name, Type = operationType, Quantity = operationQuantity,
+            BalanceAfter = item.Quantity, Note = operationNote.Trim() });
+        Notify($"Готово! {operationType}: {operationQuantity} {item.Unit}. Остаток: {item.Quantity}.");
+        operationQuantity = 1; operationNote = "";
+        await Persist();
+    }
+    private async Task ResetDemo()
+    {
+        if (!await Js.InvokeAsync<bool>("matresursStorage.askReset")) return;
+        data = InventoryData.CreateDemo(); ClearMaterialForm(); selectedMaterial = 0; message = "";
+        await Persist(); Go("home");
+    }
+    private static string Csv(string s) => "\"" + s.Replace("\"", "\"\"") + "\"";
+    private async Task ExportReport()
+    {
+        var csv = new StringBuilder("Наименование;Единица;Количество;Цена;Стоимость\r\n");
+        foreach (var m in data.Materials.OrderBy(m => m.Name))
+            csv.AppendLine($"{Csv(m.Name)};{Csv(m.Unit)};{m.Quantity};{m.Price.ToString(CultureInfo.InvariantCulture)};{(m.Price * m.Quantity).ToString(CultureInfo.InvariantCulture)}");
+        csv.AppendLine($"ИТОГО;;;;{TotalValue.ToString(CultureInfo.InvariantCulture)}");
+        await Js.InvokeVoidAsync("matresursStorage.download", "ostatki-matresurs.csv", "\ufeff" + csv.ToString());
+    }
+}
