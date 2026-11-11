@@ -30,6 +30,14 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+      # Все четыре папки с понятными именами находятся в корне репозитория.
+      # Для браузера копируем CSS и JavaScript в служебную папку wwwroot.
+      - name: Подготовить стили и скрипты
+        run: |
+          mkdir -p "wwwroot/стили" "wwwroot/Скрипты( сохранение данных и скачивание отчётов)"
+          cp "стили/site.css" "wwwroot/стили/site.css"
+          cp "Скрипты( сохранение данных и скачивание отчётов)/storage.js" "wwwroot/Скрипты( сохранение данных и скачивание отчётов)/storage.js"
+
       # Компилируем C# и Razor в статические файлы сайта.
       - name: Build Blazor WebAssembly
         run: dotnet publish MatResurs.csproj -c Release -o publish
