@@ -506,3 +506,121 @@ tfoot td { background: #edf1f5; font-weight: bold; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+
+/* 13. Небольшая доработка классического оформления.
+   Сохраняем Times New Roman, прямые углы и обычные таблицы.
+   Используем спокойные цвета, более чёткие отступы и границы. */
+:root {
+  --navy: #244d78;
+  --navy-dark: #193957;
+  --text: #273240;
+  --muted: #647180;
+  --line: #d3dbe5;
+  --page: #f4f6f8;
+}
+body { background: var(--page); }
+
+/* Верхняя строка: аккуратная навигация без значков */
+.site-header { border-bottom: 3px solid #7694b6; }
+.brand b { font-size: 25px; letter-spacing: .15px; }
+.brand small { color: #e4ecf4; }
+.side-nav button { padding-left: 16px; padding-right: 16px; }
+.side-nav button.selected,
+.side-nav button.selected:hover { border-bottom: 3px solid #89a7c8; }
+
+/* Главная: меньше пустых мест и ясная иерархия текста */
+.hero-banner { background: #edf2f7; }
+.hero-inner { padding-top: 36px; padding-bottom: 36px; }
+.hero-copy h1 { letter-spacing: -.1px; }
+.hero-card { border-left: 4px solid #6084aa; }
+.content { padding-top: 30px; }
+.section-intro { margin-bottom: 18px; }
+.section-intro h2 { font-size: 26px; }
+
+/* Показатели: четыре самостоятельные ровные карточки */
+.stat-grid, .stat-grid.two {
+  gap: 12px;
+  background: transparent;
+  border: 0;
+}
+.stat-grid .stat-card, .stat-grid.two .stat-card {
+  border: 1px solid var(--line);
+  border-top: 3px solid #7c9bb9;
+  min-height: 140px;
+  padding: 21px 20px;
+  background: #fff;
+}
+.stat-grid .stat-card:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+.stat-label { font-size: 16px; color: #4c5e70; }
+.stat-number { font-size: 29px; color: #173955; }
+.stat-help { color: #6a7684; }
+
+/* Информационные блоки не сливаются с фоном */
+.features-band, .panel, .page-top { border-color: #ccd7e2; }
+.features-band { border-top: 3px solid #809fbd; }
+.panel-title-row h2 { color: #1c405f; }
+.page-top { border-left: 4px solid #6e91b5; }
+.hint-panel { border-left-color: #6e91b5; }
+
+/* Таблицы: спокойный заголовок, чередование строк и выделение при наведении */
+.table-wrap { border-color: #cad5e1; }
+th { background: #e9eff5; color: #1c405f; border-bottom-color: #bacada; }
+tbody tr:nth-child(even) { background: #fafbfd; }
+tbody tr:hover { background: #eef4fa; }
+td { border-bottom-color: #e0e6ed; }
+
+/* Статусы: небольшие прямоугольные метки вместо круглых плашек */
+.status {
+  display: inline-block;
+  padding: 3px 8px;
+  border-left: 3px solid #68a17e;
+  color: #24613f;
+  background: #eef6f0;
+  line-height: 1.3;
+}
+.status-low, .status-expense {
+  border-left-color: #cb983e;
+  color: #86500f;
+  background: #fff5e7;
+}
+.status-income {
+  border-left-color: #68a17e;
+  color: #24613f;
+  background: #eef6f0;
+}
+
+/* Кнопки и формы: немного больше контраста, но без теней и закруглений */
+.table-actions .edit-button { background: #edf3f9; }
+.table-actions .delete-button { background: #fff3f2; }
+.table-actions .edit-button:hover { background: #dfeaf5; }
+.table-actions .delete-button:hover { background: #fde7e5; }
+.primary-button, .hero-primary { background: #244d78; }
+.primary-button:hover, .hero-primary:hover { background: #35658f; }
+.form-grid input, .form-grid select, .search {
+  background: #fff;
+  border-color: #b6c4d3;
+}
+.form-grid input:focus, .form-grid select:focus, .search:focus {
+  background: #fff;
+  border-color: #4576a4;
+}
+.site-footer { background: #244d78; }
+
+/* На узком экране карточки сохраняют отступы и отдельные рамки */
+@media (max-width: 820px) {
+  .stat-grid, .stat-grid.two { gap: 10px; }
+  .stat-grid .stat-card, .stat-grid.two .stat-card {
+    border: 1px solid var(--line);
+    border-top: 3px solid #7c9bb9;
+  }
+}
+@media (max-width: 620px) {
+  .side-nav button { padding-left: 10px; padding-right: 10px; }
+  .stat-grid .stat-card, .stat-grid.two .stat-card {
+    padding: 15px 12px;
+    min-height: 125px;
+  }
+  .stat-number { font-size: 24px; }
+  .hero-inner { padding: 28px 15px; }
+}
