@@ -3,26 +3,27 @@
 <div class="table-wrap">
   <table>
     @* Заголовки столбцов и кнопки изменения / удаления материала. *@
-    <thead><tr><th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена за ед.</th><th>Состояние</th>@if (AllowEdit) { <th>Действие</th> }</tr></thead>
+    <thead><tr>@if (AllowEdit) { <th>Действия</th> }<th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена за ед.</th><th>Состояние</th></tr></thead>
     <tbody>
       @* Обходим материалы в алфавитном порядке. *@
       @foreach (var item in Items.OrderBy(m => m.Name))
       {
         <tr>
+          @if (AllowEdit)
+          {
+            @* Кнопки помещены ПЕРВЫМИ, чтобы они были видны без горизонтальной прокрутки. *@
+            <td class="actions-cell">
+              <div class="table-actions">
+                <button type="button" class="edit-button" title="Изменить материал" @onclick="() => OnEdit.InvokeAsync(item)">✎ Изменить</button>
+                <button type="button" class="delete-button" title="Удалить материал" @onclick="() => OnDelete.InvokeAsync(item)">✕ Удалить</button>
+              </div>
+            </td>
+          }
           <td class="strong-cell">@item.Name</td>
           <td>@item.Unit</td>
           <td>@item.Quantity</td>
           <td>@item.Price.ToString("N2", new CultureInfo("ru-RU")) ₽</td>
           <td><span class="@(item.Quantity <= item.MinQuantity ? "status status-low" : "status")">@(item.Quantity <= item.MinQuantity ? "Мало" : "В наличии")</span></td>
-          @if (AllowEdit)
-          {
-            <td>
-              <div class="table-actions">
-                <button type="button" @onclick="() => OnEdit.InvokeAsync(item)">Изменить</button>
-                <button type="button" class="delete-button" @onclick="() => OnDelete.InvokeAsync(item)">Удалить</button>
-              </div>
-            </td>
-          }
         </tr>
       }
       @if (!Items.Any()) { <tr><td colspan="6">Материалы не найдены.</td></tr> }

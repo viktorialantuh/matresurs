@@ -76,19 +76,16 @@
       {
         @* Материалы: форма добавления, редактирование и поиск. *@
         <div class="page-top"><div><div class="eyebrow">СПРАВОЧНИК</div><h1>Материалы</h1><p>Добавляй материалы и отслеживай их количество.</p></div></div>
-        <div class="panel form-panel"><h2>@(editId == 0 ? "Добавить материал" : "Изменить материал")</h2>
+        <div class="panel form-panel"><h2>Добавить материал</h2>
           <div class="form-grid">
             <label>Название<input placeholder="Например: Бумага А4" @bind="materialName" /></label>
             <label>Единица измерения<select @bind="materialUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label>
             <label>Цена, ₽<input type="number" min="0" step="0.01" @bind="materialPrice" /></label>
             <label>Минимальный остаток<input type="number" min="0" step="1" @bind="materialMinimum" /></label>
-            @if (editId == 0)
-            {
-              @* Начальное количество задаётся только при создании. Дальнейшие изменения — через приход/расход. *@
-              <label>Количество на складе<input type="number" min="0" step="1" placeholder="0" @bind="materialInitialQuantity" /></label>
-            }
+            @* Для нового материала можно сразу указать начальное количество. *@
+            <label>Количество на складе<input type="number" min="0" step="1" placeholder="0" @bind="materialInitialQuantity" /></label>
           </div>
-          <div class="form-actions"><button class="primary-button" @onclick="SaveMaterial">@(editId == 0 ? "Добавить материал" : "Сохранить изменения")</button>@if (editId != 0) { <button class="outline-button" @onclick="ClearMaterialForm">Отмена</button> }</div>
+          <div class="form-actions"><button type="button" class="primary-button" @onclick="SaveMaterial">Добавить материал</button></div>
           @if (!string.IsNullOrWhiteSpace(message)) { <div class="@MessageClass">@message</div> }
         </div>
         <div class="panel"><div class="panel-title-row"><div><h2>Список материалов</h2><p>Количество автоматически меняется после операций</p></div><input class="search" placeholder="Поиск материала..." @bind="search" @bind:event="oninput" /></div><MaterialTable Items="FilteredMaterials" AllowEdit="true" OnEdit="Edit" OnDelete="DeleteMaterial" /></div>
@@ -133,6 +130,58 @@
       }
 
 
+
+      @* ФОРМА РЕДАКТИРОВАНИЯ: открывается поверх страницы по центру экрана. *@
+      @if (tab == "materials" && editId != 0)
+      {
+        <div class="material-modal-backdrop">
+          <section class="material-modal" role="dialog" aria-modal="true" aria-labelledby="edit-material-title">
+            <div class="material-modal-heading">
+              <div><span class="material-modal-kicker">СПРАВОЧНИК МАТЕРИАЛОВ</span><h2 id="edit-material-title">Изменить материал</h2><p>Отредактируй данные и нажми «Сохранить изменения».</p></div>
+              <button type="button" class="material-modal-close" aria-label="Закрыть окно редактирования" @onclick="CloseEdit">✕</button>
+            </div>
+            <div class="form-grid">
+              <label>Название<input @bind="editName" /></label>
+              <label>Единица измерения<select @bind="editUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label>
+              <label>Цена, ₽<input type="number" min="0" step="0.01" @bind="editPrice" /></label>
+              <label>Минимальный остаток<input type="number" min="0" step="1" @bind="editMinimum" /></label>
+            </div>
+            <p class="material-modal-tip">Количество на складе меняется через раздел «Приход и расход».</p>
+            @if (!string.IsNullOrWhiteSpace(modalMessage))
+            {
+              <div class="message error" role="alert">@modalMessage</div>
+            }
+            <div class="material-modal-actions">
+              <button type="button" class="outline-button" @onclick="CloseEdit">Отмена</button>
+              <button type="button" class="primary-button" @onclick="SaveEditedMaterial">Сохранить изменения</button>
+            </div>
+          </section>
+        </div>
+      }
+
+      @* ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ: отдельное заметное окно по центру, ничего не удаляет без подтверждения. *@
+      @if (tab == "materials" && pendingDeleteId != 0 && PendingDeleteMaterial != null)
+      {
+        <div class="material-modal-backdrop">
+          <section class="material-modal material-modal-delete" role="alertdialog" aria-modal="true"
+                   aria-labelledby="delete-material-title" aria-describedby="delete-material-description">
+            <div class="material-modal-heading">
+              <div><span class="material-modal-kicker danger">ПОДТВЕРЖДЕНИЕ ДЕЙСТВИЯ</span><h2 id="delete-material-title">Удалить материал?</h2></div>
+              <button type="button" class="material-modal-close" aria-label="Закрыть окно удаления" @onclick="CancelDelete">✕</button>
+            </div>
+            <p id="delete-material-description" class="material-delete-description">
+              Материал <strong>«@(PendingDeleteMaterial?.Name)»</strong> будет удалён из справочника и отчётов.
+              Остаток на складе: <strong>@(PendingDeleteMaterial?.Quantity) @(PendingDeleteMaterial?.Unit)</strong>.
+            </p>
+            <div class="material-delete-warning">Записи о прежних приходах и расходах сохранятся в истории.</div>
+            <div class="material-modal-actions">
+              <button type="button" class="outline-button" @onclick="CancelDelete">Отмена</button>
+              <button type="button" class="material-confirm-delete" @onclick="ConfirmDeleteMaterial">Да, удалить</button>
+            </div>
+          </section>
+        </div>
+      }
+
       @* Авторская подпись отображается внизу любого раздела. *@
       <footer class="site-footer">
         <div class="footer-project"><strong>МатРесурс</strong><span>Информационная система учёта материальных ресурсов</span></div>
@@ -152,7 +201,15 @@
     private string message = "";
     // Поля формы материала, включая поиск и редактирование.
     private string search = "";
+    // Открытое редактирование и подтверждение удаления показываются в модальных окнах.
     private int editId;
+    private int pendingDeleteId;
+    private string editName = "";
+    private string editUnit = "шт.";
+    private decimal editPrice;
+    private int editMinimum;
+    private string modalMessage = "";
+    private Material? PendingDeleteMaterial => data.Materials.FirstOrDefault(m => m.Id == pendingDeleteId);
     private string materialName = "";
     private string materialUnit = "шт.";
     private decimal materialPrice;
@@ -193,7 +250,11 @@
     }
 
     // Открыть выбранный раздел и очистить временные уведомления.
-    private void Go(string value) { tab = value; message = ""; search = ""; }
+    private void Go(string value)
+    {
+        tab = value; message = ""; search = "";
+        editId = 0; pendingDeleteId = 0; modalMessage = "";
+    }
     // Вывести текст сообщения под формой.
     private void Notify(string value, bool isError = false) { message = value; error = isError; }
     // Сохранить изменения в localStorage. На другом компьютере данные не появятся.
@@ -207,80 +268,116 @@
     // Очистить форму добавления материала.
     private void ClearMaterialForm()
     {
-        editId = 0; materialName = ""; materialUnit = "шт."; materialPrice = 0; materialMinimum = 0;
+        materialName = ""; materialUnit = "шт."; materialPrice = 0; materialMinimum = 0;
         materialInitialQuantity = null;
     }
-    // Заполнить форму значениями выбранного материала.
-    private void Edit(Material m)
-    {
-        editId = m.Id; materialName = m.Name; materialUnit = m.Unit;
-        materialPrice = m.Price; materialMinimum = m.MinQuantity;
-        materialInitialQuantity = null; message = "";
-    }
-    // Удалить материал только после подтверждения. Записи журнала сохраняются.
-    private async Task DeleteMaterial(Material material)
+    // Открываем редактирование в центре страницы — форма создания остаётся пустой.
+    private void Edit(Material material)
     {
         var current = data.Materials.FirstOrDefault(m => m.Id == material.Id);
+        if (current == null) { Notify("Материал не найден.", true); return; }
+        pendingDeleteId = 0;
+        editId = current.Id;
+        editName = current.Name;
+        editUnit = current.Unit;
+        editPrice = current.Price;
+        editMinimum = current.MinQuantity;
+        modalMessage = "";
+    }
+
+    private void CloseEdit()
+    {
+        editId = 0;
+        modalMessage = "";
+    }
+
+    // Сохраняем изменения из модального окна, не меняя учётный остаток материала.
+    private async Task SaveEditedMaterial()
+    {
+        var current = data.Materials.FirstOrDefault(m => m.Id == editId);
         if (current == null)
         {
-            Notify("Материал уже удалён или не найден.", true);
+            modalMessage = "Материал не найден. Закрой окно и обнови список.";
             return;
         }
+        var name = editName.Trim();
+        if (name.Length < 2)
+        {
+            modalMessage = "Название должно содержать минимум два символа.";
+            return;
+        }
+        if (editPrice < 0 || editMinimum < 0)
+        {
+            modalMessage = "Цена и минимальный остаток не могут быть отрицательными.";
+            return;
+        }
+        if (data.Materials.Any(m => m.Id != editId &&
+            m.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        {
+            modalMessage = "Материал с таким названием уже есть.";
+            return;
+        }
+        current.Name = name;
+        current.Unit = editUnit;
+        current.Price = editPrice;
+        current.MinQuantity = editMinimum;
 
-        bool confirmed = await Js.InvokeAsync<bool>("confirm",
-            $"Удалить материал «{current.Name}» (остаток: {current.Quantity} {current.Unit})?\n" +
-            "Материал исчезнет из справочника и отчётов, но история операций сохранится.");
+        CloseEdit();
+        Notify($"Материал «{current.Name}» успешно изменён.");
+        await Persist();
+    }
 
-        if (!confirmed) return;
+    // Первое нажатие «Удалить» только открывает окно с запросом подтверждения.
+    private void DeleteMaterial(Material material)
+    {
+        var current = data.Materials.FirstOrDefault(m => m.Id == material.Id);
+        if (current == null) { Notify("Материал не найден.", true); return; }
+        editId = 0;
+        modalMessage = "";
+        pendingDeleteId = current.Id;
+    }
 
-        // Проверяем по идентификатору повторно, чтобы не удалить другой материал.
-        current = data.Materials.FirstOrDefault(m => m.Id == material.Id);
-        if (current == null) return;
+    private void CancelDelete() => pendingDeleteId = 0;
+
+    // Удаляем только после явного нажатия «Да, удалить». Журнал операций не очищаем.
+    private async Task ConfirmDeleteMaterial()
+    {
+        int id = pendingDeleteId;
+        pendingDeleteId = 0;
+        var current = data.Materials.FirstOrDefault(m => m.Id == id);
+        if (current == null) { Notify("Материал уже удалён или не найден.", true); return; }
 
         data.Materials.Remove(current);
-        if (selectedMaterial == current.Id) selectedMaterial = 0;
-        if (editId == current.Id) ClearMaterialForm();
+        if (selectedMaterial == id) selectedMaterial = 0;
 
         Notify($"Материал «{current.Name}» удалён. История операций сохранена.");
         await Persist();
     }
 
-    // Проверить поля и добавить либо обновить материал.
+    // Добавить новую позицию и зафиксировать начальный остаток в истории.
     private async Task SaveMaterial()
     {
         string name = materialName.Trim();
         if (name.Length < 2) { Notify("Укажи название материала (не менее двух символов).", true); return; }
         if (materialPrice < 0 || materialMinimum < 0) { Notify("Цена и минимальный остаток не могут быть отрицательными.", true); return; }
-        if (editId == 0 && materialInitialQuantity < 0)
-        { Notify("Начальное количество не может быть отрицательным.", true); return; }
-        if (data.Materials.Any(m => m.Id != editId && m.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        if (materialInitialQuantity < 0) { Notify("Начальное количество не может быть отрицательным.", true); return; }
+        if (data.Materials.Any(m => m.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
         { Notify("Такой материал уже существует.", true); return; }
-        if (editId == 0)
+
+        int startQuantity = materialInitialQuantity ?? 0;
+        data.Materials.Add(new Material { Id = data.NextMaterialId++, Name = name,
+            Unit = materialUnit, Price = materialPrice, MinQuantity = materialMinimum, Quantity = startQuantity });
+        if (startQuantity > 0)
         {
-            var startQuantity = materialInitialQuantity ?? 0;
-            data.Materials.Add(new Material { Id = data.NextMaterialId++, Name = name,
-                Unit = materialUnit, Price = materialPrice, MinQuantity = materialMinimum, Quantity = startQuantity });
-            // Первоначальное количество фиксируется в журнале, чтобы история и остатки совпадали.
-            if (startQuantity > 0)
-            {
-                data.Operations.Add(new StockOperation { Id = data.NextOperationId++,
-                    At = DateTime.Now, MaterialName = name, Type = "Начальный остаток",
-                    Quantity = startQuantity, BalanceAfter = startQuantity, Note = "Добавление материала" });
-            }
+            data.Operations.Add(new StockOperation { Id = data.NextOperationId++,
+                At = DateTime.Now, MaterialName = name, Type = "Начальный остаток",
+                Quantity = startQuantity, BalanceAfter = startQuantity, Note = "Добавление материала" });
         }
-        else
-        {
-            var item = data.Materials.FirstOrDefault(m => m.Id == editId);
-            if (item == null) { Notify("Материал не найден.", true); return; }
-            item.Name = name; item.Unit = materialUnit; item.Price = materialPrice; item.MinQuantity = materialMinimum;
-        }
-        var resultMessage = editId == 0
-            ? "Материал добавлен. Начальное количество сохранено."
-            : "Изменения материала сохранены. Количество изменяется через приход и расход.";
         ClearMaterialForm();
-        Notify(resultMessage);
+        Notify("Материал добавлен. Начальное количество сохранено.");
         await Persist();
     }
+
     // Изменить остаток и добавить строку в журнал операций.
     private async Task MakeOperation()
     {

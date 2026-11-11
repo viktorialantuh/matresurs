@@ -406,3 +406,145 @@ td button:hover { background: #dbeaff; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+
+/* ОКНА ИЗМЕНЕНИЯ И УДАЛЕНИЯ МАТЕРИАЛА.
+   Модальные окна всегда появляются в центре видимой области экрана. */
+.material-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgba(8, 26, 55, .73);
+  backdrop-filter: blur(5px);
+}
+.material-modal {
+  width: min(100%, 570px);
+  max-height: calc(100dvh - 36px);
+  overflow-y: auto;
+  border-radius: 20px;
+  padding: 29px;
+  background: #fff;
+  box-shadow: 0 28px 90px rgba(0, 14, 43, .35);
+  border: 1px solid #dce7f6;
+}
+.material-modal-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+.material-modal-heading h2 {
+  font-size: 25px;
+  line-height: 1.18;
+  margin: 7px 0;
+}
+.material-modal-heading p {
+  margin: 0;
+  color: #667e9a;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.material-modal-kicker {
+  color: #0a58bb;
+  letter-spacing: 1.3px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.material-modal-kicker.danger { color: #bb403c; }
+.material-modal-close {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid #dae4f2;
+  color: #50647f;
+  background: #f3f7fc;
+  font-size: 17px;
+  font-weight: 700;
+}
+.material-modal-close:hover { background: #e7f0ff; }
+.material-modal-tip {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #677e9d;
+  margin: 18px 0 0;
+}
+.material-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin-top: 25px;
+}
+.material-modal-delete { border-top: 6px solid #d44d46; }
+.material-delete-description {
+  color: #405672;
+  line-height: 1.65;
+  font-size: 14px;
+  margin: 0;
+}
+.material-delete-description strong { color: #173456; }
+.material-delete-warning {
+  margin-top: 17px;
+  border-left: 3px solid #df9a36;
+  border-radius: 7px;
+  padding: 13px 15px;
+  color: #8b6028;
+  background: #fff5e5;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.material-confirm-delete {
+  padding: 12px 20px;
+  min-height: 44px;
+  border-radius: 9px;
+  border: 1px solid #ba302c;
+  color: #fff;
+  background: #c93935;
+  box-shadow: 0 6px 17px rgba(174, 55, 52, .2);
+  font-size: 13px;
+  font-weight: 800;
+}
+.material-confirm-delete:hover { background: #ae2d29; }
+
+/* Кнопки действий стоят в первом столбце и выделяются цветом. */
+.actions-cell {
+  min-width: 202px;
+}
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.table-actions .edit-button,
+.table-actions .delete-button {
+  min-height: 36px;
+  padding: 9px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+  font-weight: 750;
+}
+.table-actions .edit-button { color: #06449a; background: #e7f0ff; border-color: #bdd5fa; }
+.table-actions .edit-button:hover { background: #d7e7ff; }
+.table-actions .delete-button {
+  color: #aa2e2b;
+  background: #ffeded;
+  border: 1px solid #efb9b8;
+}
+.table-actions .delete-button:hover { background: #ffd7d6; }
+@media (max-width: 620px) {
+  .material-modal-backdrop { padding: 11px; }
+  .material-modal { padding: 20px 17px; border-radius: 15px; }
+  .material-modal-heading h2 { font-size: 22px; }
+  .material-modal-actions { justify-content: stretch; }
+  .material-modal-actions button { flex: 1; }
+  .actions-cell { min-width: 192px; }
+  .table-actions .edit-button, .table-actions .delete-button { padding: 8px 9px; font-size: 11px; }
+}
