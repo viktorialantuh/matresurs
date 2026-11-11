@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <!-- Устанавливаем русскую кодировку и настройки для экрана ноутбука и телефона. -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Учебная информационная система для учета материальных ресурсов предприятия" />
+  <meta name="description" content="Учебная информационная система учёта материальных ресурсов предприятия" />
   <title>МатРесурс — учёт материальных ресурсов</title>
+
+  <!-- Этот адрес GitHub Actions автоматически заменяет на /matresurs/. -->
   <base href="/" />
-  <link rel="stylesheet" href="css/site.css" />
-  <link rel="stylesheet" href="css/theme.css" />
+
+  <!-- Внешний вид сайта: CSS-файл в русской папке «Стили». -->
+  <link rel="stylesheet" href="Стили/site.css" />
 </head>
 <body>
-  <div id="app"><div class="loading"><div class="spinner"></div><p>Загружаем информационную систему…</p></div></div>
+  <!-- В этот элемент Blazor вставляет экран, написанный на C#. -->
+  <div id="app">
+    <div class="loading"><div class="spinner"></div>
+      <p>Загружаем информационную систему…</p>
+    </div>
+  </div>
+
+  <!-- Сообщение, если C#-приложение не загрузилось. -->
   <div id="blazor-error-ui" style="display:none">Не удалось запустить сайт. Обновите страницу.</div>
-  <script src="js/storage.js"></script>
-  <script src="js/theme.js"></script>
+
+  <!-- Служебный JavaScript: хранение данных и скачивание отчётов. -->
+  <script src="Скрипты/storage.js"></script>
+
+  <!-- Загрузка программы на C# (Blazor WebAssembly). -->
   <script src="_framework/blazor.webassembly.js"></script>
 </body>
 </html>
