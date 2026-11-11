@@ -1,11 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+  <!-- Проект на C#: Blazor WebAssembly запускается внутри обычного браузера. -->
   <PropertyGroup>
+    <!-- Используем платформу .NET 10. -->
     <TargetFramework>net10.0</TargetFramework>
+    <!-- Стандартные пространства имён подключаются автоматически. -->
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Включаем проверку потенциально отсутствующих значений (null). -->
     <Nullable>enable</Nullable>
+    <!-- Техническое имя приложения; папки проекта можно называть по-русски. -->
     <AssemblyName>MatResurs</AssemblyName>
     <RootNamespace>MatResurs</RootNamespace>
   </PropertyGroup>
+  <!-- Библиотеки для элементов сайта и поддержки запуска C# в браузере. -->
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.0" PrivateAssets="all" />

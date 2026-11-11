@@ -1,12 +1,17 @@
+# Автоматическая публикация C#-сайта при изменениях в ветке main.
+# Файл должен находиться в .github/workflows (служебное название GitHub).
 name: Publish CSharp site to GitHub Pages
+ # События: изменение исходного кода и ручной запуск.
 on:
   push:
     branches: [main]
   workflow_dispatch:
+# Права для загрузки сайта на GitHub Pages.
 permissions:
   contents: read
   pages: write
   id-token: write
+# Только одна публикация одновременно.
 concurrency:
   group: github-pages
   cancel-in-progress: true
@@ -17,14 +22,18 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # Загружаем исходный код из репозитория.
       - name: Checkout files
         uses: actions/checkout@v4
+      # Устанавливаем .NET на сервере GitHub, а не на компьютере колледжа.
       - name: Install .NET 10
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+      # Компилируем C# и Razor в статические файлы сайта.
       - name: Build Blazor WebAssembly
         run: dotnet publish MatResurs.csproj -c Release -o publish
+      # Указываем правильный путь сайта, например /matresurs/.
       - name: Configure repository URL
         shell: bash
         run: |
@@ -38,6 +47,7 @@ jobs:
           sed -i "s|<base href=\"/\" />|<base href=\"$BASE\" />|" publish/wwwroot/index.html
           touch publish/wwwroot/.nojekyll
           echo "Base path: $BASE"
+      # Последние действия: подготовить Pages, загрузить файлы, опубликовать.
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload site

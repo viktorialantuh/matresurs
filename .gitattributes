@@ -1,2 +1,3 @@
-*.js binary
+# JavaScript — исходный текст в UTF-8, а WebAssembly — двоичный файл.
+*.js text eol=lf
 *.wasm binary
