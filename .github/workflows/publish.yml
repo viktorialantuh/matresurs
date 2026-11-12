@@ -54,6 +54,8 @@ jobs:
           fi
           sed -i "s|<base href=\"/\" />|<base href=\"$BASE\" />|" publish/wwwroot/index.html
           touch publish/wwwroot/.nojekyll
+          # Дополнительный новый адрес: без старого HTML из кэша браузера.
+          cp publish/wwwroot/index.html publish/wwwroot/bez-znachkov.html
           echo "Base path: $BASE"
       # Последние действия: подготовить Pages, загрузить файлы, опубликовать.
       - name: Setup GitHub Pages
