@@ -22,7 +22,7 @@
           <td class="strong-cell">@item.Name</td>
           <td>@item.Unit</td>
           <td>@item.Quantity</td>
-          <td>@item.Price.ToString("N2", new CultureInfo("ru-RU")) ₽</td>
+          <td>@item.Price.ToString("N2", new CultureInfo("ru-RU")) руб.</td>
           <td><span class="@(item.Quantity <= item.MinQuantity ? "status status-low" : "status")">@(item.Quantity <= item.MinQuantity ? "Мало" : "В наличии")</span></td>
         </tr>
       }

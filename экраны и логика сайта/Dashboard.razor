@@ -7,7 +7,7 @@
   @* Горизонтальное текстовое меню для перехода между разделами. *@
   <header class="site-header">
     <div class="header-inner">
-      <div class="brand"><span class="brand-icon">▦</span><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
+      <div class="brand"><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
       <nav class="side-nav" aria-label="Разделы системы">
         <button type="button" class="@(tab == "home" ? "selected" : "")" @onclick='() => Go("home")'>Главная</button>
         <button type="button" class="@(tab == "materials" ? "selected" : "")" @onclick='() => Go("materials")'>Материалы</button>
@@ -25,16 +25,16 @@
       <section class="hero-banner">
         <div class="hero-inner">
           <div class="hero-copy">
-            <span class="hero-kicker">МАТРЕСУРС · УЧЁТ ПРЕДПРИЯТИЯ</span>
+            <span class="hero-kicker">УЧЕТ МАТЕРИАЛЬНЫХ РЕСУРСОВ</span>
             <h1>Материальные ресурсы<br />под контролем</h1>
             <p>Удобная информационная система для учёта материалов: добавляй позиции, оформляй приход и расход, следи за остатками и формируй отчёты.</p>
             <div class="hero-actions">
-              <button type="button" class="hero-primary" @onclick='() => Go("operation")'>+ Новая операция <span aria-hidden="true">→</span></button>
+              <button type="button" class="hero-primary" @onclick='() => Go("operation")'>Новая операция</button>
               <button type="button" class="hero-secondary" @onclick='() => Go("materials")'>Открыть материалы</button>
             </div>
           </div>
           <div class="hero-card">
-            <div class="hero-card-icon" aria-hidden="true">▦</div>
+            
             <h2>Почему это удобно?</h2>
             <ul>
               <li>Все материалы и остатки в одном месте</li>
@@ -50,27 +50,27 @@
       @if (tab == "home")
       {
         @* Главная: показатели склада и общие остатки. *@
-        <div class="section-intro"><div><h2>Склад в цифрах</h2><p>Актуальные показатели по материалам</p></div><span class="demo-label">● Демо-данные</span></div>
+        <div class="section-intro"><div><h2>Склад в цифрах</h2><p>Актуальные показатели по материалам</p></div><span class="demo-label">Демо-данные</span></div>
         <div class="stat-grid">
-          <div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-label">Наименований</div><div class="stat-number">@data.Materials.Count</div><div class="stat-help">В справочнике материалов</div></div>
-          <div class="stat-card"><div class="stat-icon violet">▥</div><div class="stat-label">Единиц на складе</div><div class="stat-number">@data.Materials.Sum(m => m.Quantity)</div><div class="stat-help">Текущий остаток</div></div>
-          <div class="stat-card"><div class="stat-icon green">₽</div><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div><div class="stat-help">По учётным ценам</div></div>
-          <div class="stat-card"><div class="stat-icon orange">!</div><div class="stat-label">Мало на складе</div><div class="stat-number">@LowCount</div><div class="stat-help">Требуют внимания</div></div>
+          <div class="stat-card"><div class="stat-label">Наименований</div><div class="stat-number">@data.Materials.Count</div><div class="stat-help">В справочнике материалов</div></div>
+          <div class="stat-card"><div class="stat-label">Единиц на складе</div><div class="stat-number">@data.Materials.Sum(m => m.Quantity)</div><div class="stat-help">Текущий остаток</div></div>
+          <div class="stat-card"><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div><div class="stat-help">По учётным ценам</div></div>
+          <div class="stat-card"><div class="stat-label">Мало на складе</div><div class="stat-number">@LowCount</div><div class="stat-help">Требуют внимания</div></div>
         </div>
         @* Основные возможности системы описаны в трёх разделах. *@
         <section class="features-band" aria-label="Возможности системы">
           <div class="features-heading"><span>ВОЗМОЖНОСТИ СИСТЕМЫ</span><h2>Всё необходимое для учёта</h2></div>
           <div class="features-grid">
-            <article class="feature-card"><div class="feature-symbol">▣</div><h3>Справочник материалов</h3><p>Добавление новых позиций, изменение цен и контроль минимального остатка.</p></article>
-            <article class="feature-card"><div class="feature-symbol">⇄</div><h3>Приход и расход</h3><p>Регистрация движения ресурсов с автоматическим пересчётом количества.</p></article>
-            <article class="feature-card"><div class="feature-symbol">▤</div><h3>Отчётность</h3><p>История операций, итоговая стоимость запасов и скачивание CSV.</p></article>
+            <article class="feature-card"><h3>Справочник материалов</h3><p>Добавление новых позиций, изменение цен и контроль минимального остатка.</p></article>
+            <article class="feature-card"><h3>Приход и расход</h3><p>Регистрация движения ресурсов с автоматическим пересчётом количества.</p></article>
+            <article class="feature-card"><h3>Отчётность</h3><p>История операций, итоговая стоимость запасов и скачивание CSV.</p></article>
           </div>
         </section>
         <div class="panel">
-          <div class="panel-title-row"><div><h2>Остатки материалов</h2><p>Актуальные сведения по всем позициям</p></div><button class="quiet-button" @onclick='() => Go("materials")'>Все материалы →</button></div>
+          <div class="panel-title-row"><div><h2>Остатки материалов</h2><p>Актуальные сведения по всем позициям</p></div><button class="quiet-button" @onclick='() => Go("materials")'>Все материалы</button></div>
           <MaterialTable Items="data.Materials" AllowEdit="false" />
         </div>
-        <div class="hint-panel"><b>Как пользоваться?</b><span>1. Добавь материал → 2. Оформи приход или расход → 3. Посмотри остатки и отчёт.</span></div>
+        <div class="hint-panel"><b>Как пользоваться?</b><span>1. Добавь материал. 2. Оформи приход или расход. 3. Посмотри остатки и отчёт.</span></div>
       }
       else if (tab == "materials")
       {
@@ -80,7 +80,7 @@
           <div class="form-grid">
             <label>Название<input placeholder="Например: Бумага А4" @bind="materialName" /></label>
             <label>Единица измерения<select @bind="materialUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label>
-            <label>Цена, ₽<input type="number" min="0" step="0.01" @bind="materialPrice" /></label>
+            <label>Цена, руб.<input type="number" min="0" step="0.01" @bind="materialPrice" /></label>
             <label>Минимальный остаток<input type="number" min="0" step="1" @bind="materialMinimum" /></label>
             @* Для нового материала можно сразу указать начальное количество. *@
             <label>Количество на складе<input type="number" min="0" step="1" placeholder="0" @bind="materialInitialQuantity" /></label>
@@ -95,7 +95,7 @@
         @* Операции: приход увеличивает остаток, расход уменьшает. *@
         <div class="page-top"><div><div class="eyebrow">СКЛАДСКОЙ УЧЁТ</div><h1>Приход и расход</h1><p>Оформи поступление или выдачу со склада.</p></div></div>
         <div class="panel form-panel narrow-panel"><h2>Новая операция</h2>
-          <div class="type-switch"><button class="@(operationType == "Приход" ? "active" : "")" @onclick='() => operationType = "Приход"'>↓ Приход</button><button class="@(operationType == "Расход" ? "active" : "")" @onclick='() => operationType = "Расход"'>↑ Расход</button></div>
+          <div class="type-switch"><button class="@(operationType == "Приход" ? "active" : "")" @onclick='() => operationType = "Приход"'>Приход</button><button class="@(operationType == "Расход" ? "active" : "")" @onclick='() => operationType = "Расход"'>Расход</button></div>
           <div class="form-grid single">
             <label>Материал<select @bind="selectedMaterial"><option value="0">Выбери материал</option>@foreach (var item in data.Materials.OrderBy(m => m.Name)) { <option value="@item.Id">@item.Name (@item.Quantity @item.Unit)</option> }</select></label>
             <label>Количество<input type="number" min="1" step="1" @bind="operationQuantity" /></label>
@@ -121,7 +121,7 @@
       {
         @* Отчёт: список остатков и экспорт CSV. *@
         <div class="page-top"><div><div class="eyebrow">АНАЛИТИКА</div><h1>Отчёт по остаткам</h1><p>Сводная стоимость материалов и список товаров.</p></div><button class="primary-button" @onclick="ExportReport">Скачать отчет</button></div>
-        <div class="stat-grid two"><div class="stat-card"><div class="stat-icon blue">▣</div><div class="stat-label">Всего позиций</div><div class="stat-number">@data.Materials.Count</div></div><div class="stat-card"><div class="stat-icon green">₽</div><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div></div></div>
+        <div class="stat-grid two"><div class="stat-card"><div class="stat-label">Всего позиций</div><div class="stat-number">@data.Materials.Count</div></div><div class="stat-card"><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div></div></div>
         <div class="panel"><div class="panel-title-row"><h2>Ведомость остатков</h2><span class="subtle">Дата: @DateTime.Now.ToString("dd.MM.yyyy")</span></div>
           <div class="table-wrap"><table><thead><tr><th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена</th><th>Стоимость</th></tr></thead><tbody>
             @foreach (var m in data.Materials.OrderBy(m => m.Name)) { <tr><td class="strong-cell">@m.Name</td><td>@m.Unit</td><td>@m.Quantity</td><td>@Money(m.Price)</td><td>@Money(m.Price * m.Quantity)</td></tr> }
@@ -150,12 +150,12 @@
       <section class="material-modal" role="document" aria-labelledby="edit-material-title">
         <div class="material-modal-heading">
           <div><span class="material-modal-kicker">СПРАВОЧНИК МАТЕРИАЛОВ</span><h2 id="edit-material-title">Изменить материал</h2><p>Измени данные и сохрани результат.</p></div>
-          <button type="button" class="material-modal-close" aria-label="Закрыть окно редактирования" @onclick="CloseEdit">✕</button>
+          <button type="button" class="material-modal-close" aria-label="Закрыть окно редактирования" @onclick="CloseEdit">Закрыть</button>
         </div>
         <div class="form-grid">
           <label>Название<input @bind="editName" /></label>
           <label>Единица измерения<select @bind="editUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label>
-          <label>Цена, ₽<input type="number" min="0" step="0.01" @bind="editPrice" /></label>
+          <label>Цена, руб.<input type="number" min="0" step="0.01" @bind="editPrice" /></label>
           <label>Минимальный остаток<input type="number" min="0" step="1" @bind="editMinimum" /></label>
         </div>
         <p class="material-modal-tip">Количество на складе меняется через раздел «Приход и расход».</p>
@@ -177,7 +177,7 @@
                aria-labelledby="delete-material-title" aria-describedby="delete-material-description">
         <div class="material-modal-heading">
           <div><span class="material-modal-kicker danger">ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ</span><h2 id="delete-material-title">Удалить материал?</h2></div>
-          <button type="button" class="material-modal-close" aria-label="Закрыть окно удаления" @onclick="CancelDelete">✕</button>
+          <button type="button" class="material-modal-close" aria-label="Закрыть окно удаления" @onclick="CancelDelete">Закрыть</button>
         </div>
         <p id="delete-material-description" class="material-delete-description">
           Материал <strong>«@(PendingDeleteMaterial?.Name)»</strong> будет удалён из справочника и отчётов.
@@ -231,7 +231,7 @@
     private int LowCount => data.Materials.Count(m => m.Quantity <= m.MinQuantity);
     private List<Material> FilteredMaterials => data.Materials.Where(m => m.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
     private string MessageClass => error ? "message error" : "message success";
-    private static string Money(decimal v) => v.ToString("N2", new CultureInfo("ru-RU")) + " ₽";
+    private static string Money(decimal v) => v.ToString("N2", new CultureInfo("ru-RU")) + " руб.";
 
     // При первом открытии загружаем ранее сохранённые данные браузера.
     protected override async Task OnAfterRenderAsync(bool firstRender)

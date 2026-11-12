@@ -672,3 +672,12 @@ tfoot td { border-top: 2px solid #9db1c6; }
 .material-modal-heading { border-bottom: 1px solid #e0e6ed; padding-bottom: 15px; }
 .material-modal-actions { padding-top: 6px; }
 .site-footer { border-top: 3px solid #9cb4cc; }
+
+
+/* После удаления декоративных символов окно закрывается текстовой кнопкой. */
+.material-modal-close {
+  min-width: 82px;
+  padding: 5px 11px;
+  font-size: 15px;
+  white-space: nowrap;
+}
