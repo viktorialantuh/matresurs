@@ -1,8 +1,5 @@
-/* МатРесурс. Классическое оформление учебного проекта.
-   Без теней, скруглений и декоративных значков.
-   Основные разделы: меню, сводка, таблицы, формы, окна и подвал. */
 
-/* 1. Общие правила и типографика */
+
 :root {
   color-scheme: light;
   --navy: #1e416c;
@@ -40,7 +37,7 @@ h3 { font-size: 20px; margin-bottom: 9px; }
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
 .main-content { min-width: 0; width: 100%; flex: 1; }
 
-/* 2. Простое верхнее меню. Только названия разделов */
+/* верхнее меню. Только названия разделов */
 .site-header {
   position: sticky;
   z-index: 30;
@@ -81,7 +78,7 @@ h3 { font-size: 20px; margin-bottom: 9px; }
   font-weight: bold;
 }
 
-/* 3. Верхняя часть главной страницы — без градиента и декоративных окружностей */
+/* 3. Верхняя часть главной страницы  */
 .hero-banner {
   background: #e8edf3;
   border-bottom: 1px solid var(--line);
@@ -183,7 +180,7 @@ h3 { font-size: 20px; margin-bottom: 9px; }
   letter-spacing: 0;
 }
 
-/* 5. Сводка по складу: квадратные ячейки как в обычной учётной системе */
+/* 5. Сводка по складу*/
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -205,7 +202,7 @@ h3 { font-size: 20px; margin-bottom: 9px; }
 .stat-number { font-size: 30px; color: #192e48; font-weight: bold; overflow-wrap: anywhere; line-height: 1.2; }
 .stat-help { font-size: 14px; color: var(--muted); margin-top: 11px; }
 
-/* 6. Возможности: обычная секция, без синего баннера */
+
 .features-band {
   margin: 28px 0;
   padding: 25px;
@@ -226,7 +223,7 @@ h3 { font-size: 20px; margin-bottom: 9px; }
 .feature-card h3 { font-size: 19px; margin-bottom: 9px; color: var(--navy-dark); }
 .feature-card p { font-size: 16px; line-height: 1.4; margin: 0; color: #46556a; }
 
-/* 7. Простые таблицы без цветных "капсул" */
+
 .panel {
   background: #fff;
   border: 1px solid var(--line);
@@ -279,7 +276,7 @@ tfoot td { background: #edf1f5; font-weight: bold; }
 .quiet-button:hover { color: #37628f; }
 .subtle { color: var(--muted); font-size: 15px; }
 
-/* Две заметные и прямоугольные кнопки в первом столбце */
+
 .actions-cell { min-width: 188px; }
 .table-actions { display: flex; gap: 7px; align-items: center; flex-wrap: nowrap; }
 .table-actions .edit-button, .table-actions .delete-button {
@@ -295,7 +292,7 @@ tfoot td { background: #edf1f5; font-weight: bold; }
 .table-actions .delete-button { color: #a52c26; border: 1px solid #b35c59; }
 .table-actions .delete-button:hover { background: #fceeed; }
 
-/* 8. Поля ввода и действия с материалами */
+
 .form-panel h2 { margin-bottom: 19px; }
 .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; }
 .form-grid.single { grid-template-columns: 1fr; }
@@ -366,7 +363,6 @@ tfoot td { background: #edf1f5; font-weight: bold; }
 }
 .hint-panel b { color: var(--navy-dark); }
 
-/* 9. Нижняя полоса с подписью автора */
 .site-footer {
   display: flex; justify-content: space-between; align-items: center;
   gap: 18px; flex-wrap: wrap;
@@ -389,8 +385,7 @@ tfoot td { background: #edf1f5; font-weight: bold; }
 }
 .footer-reset:hover { background: #355983; }
 
-/* 10. Окно редактирования и подтверждение удаления.
-   <dialog>.showModal() обеспечивает положение над всей страницей. */
+
 .material-native-dialog {
   position: fixed;
   inset: 0;
@@ -450,7 +445,6 @@ tfoot td { background: #edf1f5; font-weight: bold; }
 }
 .material-confirm-delete:hover { background: #902720; }
 
-/* 11. Временный экран загрузки Blazor */
 .loading { margin: 23vh auto; text-align: center; font-size: 18px; color: var(--navy); }
 .spinner {
   margin: 0 auto 16px;
@@ -463,7 +457,7 @@ tfoot td { background: #edf1f5; font-weight: bold; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* 12. Отображение на узких экранах */
+
 @media (max-width: 1100px) {
   .header-inner { flex-direction: column; gap: 10px; }
   .side-nav { justify-content: center; }
@@ -508,9 +502,7 @@ tfoot td { background: #edf1f5; font-weight: bold; }
 }
 
 
-/* 13. Небольшая доработка классического оформления.
-   Сохраняем Times New Roman, прямые углы и обычные таблицы.
-   Используем спокойные цвета, более чёткие отступы и границы. */
+
 :root {
   --navy: #244d78;
   --navy-dark: #193957;
@@ -521,7 +513,7 @@ tfoot td { background: #edf1f5; font-weight: bold; }
 }
 body { background: var(--page); }
 
-/* Верхняя строка: аккуратная навигация без значков */
+
 .site-header { border-bottom: 3px solid #7694b6; }
 .brand b { font-size: 25px; letter-spacing: .15px; }
 .brand small { color: #e4ecf4; }
@@ -529,7 +521,7 @@ body { background: var(--page); }
 .side-nav button.selected,
 .side-nav button.selected:hover { border-bottom: 3px solid #89a7c8; }
 
-/* Главная: меньше пустых мест и ясная иерархия текста */
+
 .hero-banner { background: #edf2f7; }
 .hero-inner { padding-top: 36px; padding-bottom: 36px; }
 .hero-copy h1 { letter-spacing: -.1px; }
