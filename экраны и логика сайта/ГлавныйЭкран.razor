@@ -72,7 +72,7 @@
         </section>
         <div class="panel">
           <div class="panel-title-row"><div><h2>Остатки материалов</h2><p>Актуальные сведения по всем позициям</p></div><button class="quiet-button" @onclick='() => Go("materials")'>Все материалы</button></div>
-          <MaterialTable Items="data.Materials" AllowEdit="false" />
+          <ТаблицаМатериалов Items="data.Materials" AllowEdit="false" />
         </div>
         <div class="hint-panel"><b>Как пользоваться?</b><span>1. Добавь материал. 2. Оформи приход или расход. 3. Посмотри остатки и отчёт.</span></div>
       }
@@ -93,7 +93,7 @@
           <div class="form-actions"><button type="button" class="primary-button" @onclick="SaveMaterial">Добавить материал</button></div>
           @if (!string.IsNullOrWhiteSpace(message)) { <div class="@MessageClass">@message</div> }
         </div>
-        <div class="panel"><div class="panel-title-row"><div><h2>Список материалов</h2><p>Количество автоматически меняется после операций</p></div><input class="search" placeholder="Поиск материала..." @bind="search" @bind:event="oninput" /></div><MaterialTable Items="FilteredMaterials" AllowEdit="true" OnEdit="Edit" OnDelete="DeleteMaterial" /></div>
+        <div class="panel"><div class="panel-title-row"><div><h2>Список материалов</h2><p>Количество автоматически меняется после операций</p></div><input class="search" placeholder="Поиск материала..." @bind="search" @bind:event="oninput" /></div><ТаблицаМатериалов Items="FilteredMaterials" AllowEdit="true" OnEdit="Edit" OnDelete="DeleteMaterial" /></div>
       }
       else if (tab == "operation")
       {
