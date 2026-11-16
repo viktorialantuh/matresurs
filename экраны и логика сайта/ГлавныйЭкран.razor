@@ -1,10 +1,9 @@
 @namespace MatResurs.Pages
-@* Главный экран на C#: здесь находятся разделы материалов, движения и отчётов. *@
 @* IJSRuntime позволяет вызывать JavaScript из C#: это нужно для сохранения и скачивания отчёта. *@
 @inject IJSRuntime Js
 @using System.Text
 <div class="app-shell">
-  @* Горизонтальное текстовое меню для перехода между разделами. *@
+  
   @* @onclick у кнопки вызывает метод C#, а Go("home") открывает нужный раздел. *@
   <header class="site-header">
 <div class="header-inner"> <div class="brand"><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
@@ -17,7 +16,7 @@
   <main class="main-content">
     @if (tab == "home")
     {
-      @* Основной синий блок главной страницы. *@
+      @* Основной блок главной страницы. *@
       <section class="hero-banner">
 <div class="hero-inner"> <div class="hero-copy"> <span class="hero-kicker">УЧЕТ МАТЕРИАЛЬНЫХ РЕСУРСОВ</span> <h1>Материальные ресурсы<br />под контролем</h1> <p>Удобная информационная система для учёта материалов: добавляй позиции, оформляй приход и расход, следи за остатками и формируй отчёты.</p> <div class="hero-actions">
 <button type="button" class="hero-primary" @onclick='() => Go("operation")'>Новая операция</button> <button type="button" class="hero-secondary" @onclick='() => Go("materials")'>Открыть материалы</button> </div> </div> <div class="hero-card"> <h2>Почему это удобно?</h2> <ul> <li>Все материалы и остатки в одном месте</li> <li>История каждого поступления и расхода</li> <li>Проверка количества перед списанием</li>
@@ -76,7 +75,7 @@
       }
       else if (tab == "report")
       {
-        @* Отчёт: список остатков и экспорт CSV. *@
+        @* Отчёт: список остатков и экспорт . *@
 <div class="page-top"><div><div class="eyebrow">АНАЛИТИКА</div><h1>Отчёт по остаткам</h1><p>Сводная стоимость материалов и список товаров.</p></div><button class="primary-button" @onclick="ExportReport">Скачать отчет</button></div>
 <div class="stat-grid two"><div class="stat-card"><div class="stat-label">Всего позиций</div><div class="stat-number">@data.Materials.Count</div></div><div class="stat-card"><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div></div></div>
 <div class="panel"><div class="panel-title-row"><h2>Ведомость остатков</h2><span class="subtle">Дата: @DateTime.Now.ToString("dd.MM.yyyy")</span></div> <div class="table-wrap"><table><thead><tr><th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена</th><th>Стоимость</th></tr></thead><tbody>
@@ -261,7 +260,7 @@
     await Persist(); Go("home");
   }
 
-  // Скачиваем CSV-отчёт, который можно открыть в Excel
+  // Скачиваем отчёт, который можно открыть в Excel
   private async Task ExportReport() {
     var csv = new StringBuilder("Наименование;Единица;Количество;Цена;Стоимость\r\n");
     foreach (var m in data.Materials.OrderBy(m => m.Name))
