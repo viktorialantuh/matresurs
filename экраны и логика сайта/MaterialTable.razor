@@ -6,6 +6,7 @@
     <thead><tr>@if (AllowEdit) { <th>Действия</th> }<th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена за ед.</th><th>Состояние</th></tr></thead>
     <tbody>
       @* Обходим материалы в алфавитном порядке. *@
+      @* foreach повторяет строку таблицы для каждого материала; OrderBy сортирует по названию. *@
       @foreach (var item in Items.OrderBy(m => m.Name))
       {
         <tr>
@@ -23,6 +24,7 @@
           <td>@item.Unit</td>
           <td>@item.Quantity</td>
           <td>@item.Price.ToString("N2", new CultureInfo("ru-RU")) руб.</td>
+          @* Если остаток меньше или равен минимуму, показываем предупреждение «Мало». *@
           <td><span class="@(item.Quantity <= item.MinQuantity ? "status status-low" : "status")">@(item.Quantity <= item.MinQuantity ? "Мало" : "В наличии")</span></td>
         </tr>
       }
@@ -33,6 +35,7 @@
 
 @code {
   // Данные и настройки таблицы передаются из Dashboard.razor.
+  // [Parameter] означает: данные переданы сюда из основного экрана Dashboard.
   [Parameter] public List<Material> Items { get; set; } = new();
   [Parameter] public bool AllowEdit { get; set; }
   // Событие нажатия на кнопку изменения строки.
