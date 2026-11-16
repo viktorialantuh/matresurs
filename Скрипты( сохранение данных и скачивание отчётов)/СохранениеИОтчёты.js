@@ -1,4 +1,3 @@
-
 // При публикации GitHub копирует его в wwwroot.
 window.matresursStorage = {
   // Загрузка материалов и истории из localStorage.
