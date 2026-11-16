@@ -1,10 +1,12 @@
 @namespace MatResurs.Pages
 @* Главный экран на C#: здесь находятся разделы материалов, движения и отчётов. *@
+@* IJSRuntime позволяет вызывать JavaScript из C#: это нужно для сохранения и скачивания отчёта. *@
 @inject IJSRuntime Js
 @using System.Text
 
 <div class="app-shell">
   @* Горизонтальное текстовое меню для перехода между разделами. *@
+  @* @onclick у кнопки вызывает метод C#, а Go("home") открывает нужный раздел. *@
   <header class="site-header">
     <div class="header-inner">
       <div class="brand"><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
@@ -46,11 +48,13 @@
         </div>
       </section>
     }
+    @* Условие @if (tab == ...) выбирает, какой раздел виден на экране. *@
     <div class="content">
       @if (tab == "home")
       {
         @* Главная: показатели склада и общие остатки. *@
         <div class="section-intro"><div><h2>Склад в цифрах</h2><p>Актуальные показатели по материалам</p></div></div>
+        @* Count считает материалы; Sum складывает количество; Money оформляет сумму в рублях. *@
         <div class="stat-grid">
           <div class="stat-card"><div class="stat-label">Наименований</div><div class="stat-number">@data.Materials.Count</div><div class="stat-help">В справочнике материалов</div></div>
           <div class="stat-card"><div class="stat-label">Единиц на складе</div><div class="stat-number">@data.Materials.Sum(m => m.Quantity)</div><div class="stat-help">Текущий остаток</div></div>
@@ -78,6 +82,7 @@
         <div class="page-top"><div><div class="eyebrow">СПРАВОЧНИК</div><h1>Материалы</h1><p>Добавляй материалы и отслеживай их количество.</p></div></div>
         <div class="panel form-panel"><h2>Добавить материал</h2>
           <div class="form-grid">
+            @* @bind связывает поле ввода с переменной materialName в блоке @code ниже. *@
             <label>Название<input placeholder="Например: Бумага А4" @bind="materialName" /></label>
             <label>Единица измерения<select @bind="materialUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label>
             <label>Цена, руб.<input type="number" min="0" step="0.01" @bind="materialPrice" /></label>
@@ -101,6 +106,7 @@
             <label>Количество<input type="number" min="1" step="1" @bind="operationQuantity" /></label>
             <label>Комментарий (необязательно)<input placeholder="Например: Для отдела снабжения" @bind="operationNote" /></label>
           </div>
+          @* Нажатие вызывает MakeOperation(): она проверяет остаток и записывает движение. *@
           <button class="primary-button" @onclick="MakeOperation">Сохранить операцию</button>
           @if (!string.IsNullOrWhiteSpace(message)) { <div class="@MessageClass">@message</div> }
           <div class="inline-tip">Важно: система не позволяет списать больше, чем есть на складе.</div>
@@ -227,8 +233,11 @@
     private bool error;
     private bool initialized;
     // Вычисляемые показатели: общая стоимость, низкий остаток, фильтрация.
+    // Цена × количество для каждого материала, затем Sum складывает эти стоимости.
     private decimal TotalValue => data.Materials.Sum(m => m.Price * m.Quantity);
+    // Count считает, у скольких материалов осталось не больше установленного минимума.
     private int LowCount => data.Materials.Count(m => m.Quantity <= m.MinQuantity);
+    // Where оставляет только материалы, название которых содержит введённый текст поиска.
     private List<Material> FilteredMaterials => data.Materials.Where(m => m.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
     private string MessageClass => error ? "message error" : "message success";
     private static string Money(decimal v) => v.ToString("N2", new CultureInfo("ru-RU")) + " руб.";
@@ -239,9 +248,11 @@
         if (!firstRender) return;
         try
         {
+            // Вызов функции load из storage.js: получаем сохранённый текст JSON.
             var saved = await Js.InvokeAsync<string?>("matresursStorage.load");
             if (!string.IsNullOrEmpty(saved))
             {
+                // Deserialize превращает сохранённый JSON обратно в материалы и операции C#.
                 var loaded = JsonSerializer.Deserialize<InventoryData>(saved);
                 if (loaded?.Materials != null && loaded.Operations != null) data = loaded;
             }
@@ -263,6 +274,7 @@
     private async Task Persist()
     {
         if (!initialized) return;
+        // Serialize переводит данные в JSON, а JavaScript кладёт его в память браузера.
         try { await Js.InvokeVoidAsync("matresursStorage.save", JsonSerializer.Serialize(data)); }
         catch (Exception) { Notify("В этом браузере сохранение запрещено. Данные доступны до обновления страницы.", true); }
     }
@@ -378,13 +390,16 @@
     private async Task SaveMaterial()
     {
         string name = materialName.Trim();
+        // if проверяет условие; return прекращает добавление при неправильном названии.
         if (name.Length < 2) { Notify("Укажи название материала (не менее двух символов).", true); return; }
         if (materialPrice < 0 || materialMinimum < 0) { Notify("Цена и минимальный остаток не могут быть отрицательными.", true); return; }
         if (materialInitialQuantity < 0) { Notify("Начальное количество не может быть отрицательным.", true); return; }
+        // Any ищет совпадающее название, не учитывая большие и маленькие буквы.
         if (data.Materials.Any(m => m.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
         { Notify("Такой материал уже существует.", true); return; }
 
         int startQuantity = materialInitialQuantity ?? 0;
+        // Add добавляет запись в список; ++ выдаёт следующий уникальный номер.
         data.Materials.Add(new Material { Id = data.NextMaterialId++, Name = name,
             Unit = materialUnit, Price = materialPrice, MinQuantity = materialMinimum, Quantity = startQuantity });
         if (startQuantity > 0)
@@ -401,15 +416,19 @@
     // Изменить остаток и добавить строку в журнал операций.
     private async Task MakeOperation()
     {
+        // Находим выбранный материал по Id. Если не найден, покажем ошибку.
         var item = data.Materials.FirstOrDefault(m => m.Id == selectedMaterial);
         if (item == null) { Notify("Сначала выбери материал.", true); return; }
         if (!operationQuantity.HasValue || operationQuantity.Value <= 0)
         { Notify("Укажи количество больше нуля.", true); return; }
         int quantity = operationQuantity.Value;
+        // && означает «и»: запрещаем расход, когда списывают больше, чем имеется.
         if (operationType == "Расход" && quantity > item.Quantity)
         { Notify($"Недостаточно материала на складе: доступно {item.Quantity} {item.Unit}.", true); return; }
+        // Приход прибавляет количество, расход вычитает. checked защищает от переполнения числа.
         try { item.Quantity = checked(item.Quantity + (operationType == "Приход" ? quantity : -quantity)); }
         catch (OverflowException) { Notify("Слишком большое количество.", true); return; }
+        // Записываем операцию в историю: дата, материал, вид движения и новый остаток.
         data.Operations.Add(new StockOperation { Id = data.NextOperationId++, At = DateTime.Now,
             MaterialName = item.Name, Type = operationType, Quantity = quantity,
             BalanceAfter = item.Quantity, Note = operationNote.Trim() });
@@ -434,10 +453,12 @@
     // Составить отчёт об остатках и скачать CSV-файл.
     private async Task ExportReport()
     {
+        // CSV — текстовая таблица; точка с запятой разделяет столбцы для открытия в Excel.
         var csv = new StringBuilder("Наименование;Единица;Количество;Цена;Стоимость\r\n");
         foreach (var m in data.Materials.OrderBy(m => m.Name))
             csv.AppendLine($"{Csv(m.Name)};{Csv(m.Unit)};{m.Quantity};{m.Price.ToString(CultureInfo.InvariantCulture)};{(m.Price * m.Quantity).ToString(CultureInfo.InvariantCulture)}");
         csv.AppendLine($"ИТОГО;;;;{TotalValue.ToString(CultureInfo.InvariantCulture)}");
+        // JavaScript создаёт файл и предлагает браузеру скачать его на компьютер.
         await Js.InvokeVoidAsync("matresursStorage.download", "ostatki-matresurs.csv", "\ufeff" + csv.ToString());
     }
 }
