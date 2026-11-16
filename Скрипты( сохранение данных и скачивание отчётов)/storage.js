@@ -4,9 +4,11 @@
 // Важно: данные сохраняются отдельно в браузере каждого компьютера.
 window.matresursStorage = {
   // Загрузка материалов и истории из localStorage.
+  // getItem читает запись по ключу. Имя ключа не меняем, чтобы не потерять данные.
   load: () => localStorage.getItem("matresurs-demo-v1"),
 
   // Сохранение результатов работы программы.
+  // setItem перезаписывает сохранённую копию материалов и журнала.
   save: (json) => localStorage.setItem("matresurs-demo-v1", json),
 
   // Удаление сохранённых данных (используется при необходимости сброса).
@@ -20,6 +22,7 @@ window.matresursStorage = {
   // Создаём и скачиваем отчёт, который подготовил C#.
   download: (name, content) => {
     // Blob — временный файл прямо в памяти браузера.
+    // const создаёт переменную, значение которой не переназначается.
     const blob = new Blob([content], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
