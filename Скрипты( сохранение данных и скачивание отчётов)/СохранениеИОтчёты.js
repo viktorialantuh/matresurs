@@ -16,20 +16,18 @@ window.matresursStorage = {
     "Вернуть демонстрационные данные? Ваши изменения будут удалены."
   ),
 
-  // Создаём и скачиваем отчёт, который подготовил C#.
-  download: (name, content) => {
-    const blob = new Blob([content], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    // Создаём ссылку и автоматически нажимаем её для скачивания.
-    link.href = url;
-    link.download = name;
-    document.body.appendChild(link);
-    link.click();
-
-    // Освобождаем временные ресурсы.
-    link.remove();
-    URL.revokeObjectURL(url);
+  // Формируем Excel с числовыми ячейками, ценами и итогом.
+  downloadExcel: (name, rows) => {
+    if (!window.XLSX) throw new Error("Библиотека Excel не загрузилась");
+    const sheet = XLSX.utils.aoa_to_sheet(rows);
+    sheet["!cols"] = [{ wch: 30 }, { wch: 15 }, { wch: 15 }, { wch: 16 }, { wch: 18 }];
+    for (let i = 1; i < rows.length; i++)
+      for (const col of ["D", "E"]) {
+        const cell = sheet[col + (i + 1)];
+        if (cell && cell.t === "n") cell.z = "#,##0.00";
+      }
+    const book = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(book, sheet, "Остатки");
+    XLSX.writeFile(book, name);
   }
 };

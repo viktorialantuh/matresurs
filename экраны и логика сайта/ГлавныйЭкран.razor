@@ -1,7 +1,7 @@
 @namespace MatResurs.Pages
 @* IJSRuntime позволяет вызывать JavaScript из C#: это нужно для сохранения и скачивания отчёта. *@
 @inject IJSRuntime Js
-@using System.Text
+
 <div class="app-shell">
   
   @* @onclick у кнопки вызывает метод C#, а Go("home") открывает нужный раздел. *@
@@ -140,7 +140,6 @@
   private List<Material> FilteredMaterials => data.Materials.Where(m => m.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
   private string MessageClass => error ? "message error" : "message success";
   private static string Money(decimal v) => v.ToString("N2", new CultureInfo("ru-RU")) + " руб.";
-  private static string Csv(string s) => "\"" + s.Replace("\"", "\"\"") + "\"";
 
   // Читаем материалы из localStorage после запуска в браузере
   protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -260,12 +259,15 @@
     await Persist(); Go("home");
   }
 
-  // Скачиваем отчёт, который можно открыть в Excel
+  // Выгружаем числовые данные в настоящую таблицу Excel (.xlsx).
   private async Task ExportReport() {
-    var csv = new StringBuilder("Наименование;Единица;Количество;Цена;Стоимость\r\n");
+    var rows = new List<object[]> {
+      new object[] { "Наименование", "Единица", "Количество", "Цена", "Стоимость" }
+    };
     foreach (var m in data.Materials.OrderBy(m => m.Name))
-      csv.AppendLine($"{Csv(m.Name)};{Csv(m.Unit)};{m.Quantity};{m.Price.ToString(CultureInfo.InvariantCulture)};{(m.Price * m.Quantity).ToString(CultureInfo.InvariantCulture)}");
-    csv.AppendLine($"ИТОГО;;;;{TotalValue.ToString(CultureInfo.InvariantCulture)}");
-    await Js.InvokeVoidAsync("matresursStorage.download", "ostatki-matresurs.csv", "\ufeff" + csv.ToString());
+      rows.Add(new object[] { m.Name, m.Unit, m.Quantity, m.Price, m.Price * m.Quantity });
+    rows.Add(new object[] { "ИТОГО", "", "", "", TotalValue });
+    try { await Js.InvokeVoidAsync("matresursStorage.downloadExcel", "ostatki-matresurs.xlsx", rows); }
+    catch (Exception) { Notify("Не удалось создать Excel. Проверь подключение к интернету.", true); }
   }
 }
