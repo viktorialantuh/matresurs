@@ -21,7 +21,7 @@ h2 { font-size: 24px; margin-bottom: 10px; }
 h3 { font-size: 20px; margin-bottom: 9px; }
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
 .main-content { min-width: 0; width: 100%; flex: 1; }
-/* верхнее меню. Только названия разделов */
+/* верхнее меню */
 .site-header { position: sticky; z-index: 30; top: 0; color: #fff; }
 .header-inner {
   display: flex; justify-content: space-between; align-items: center; gap: 25px; width: min(100%, 1240px);
@@ -262,7 +262,7 @@ body { background: var(--page); }
 .content { padding-top: 30px; }
 .section-intro { margin-bottom: 18px; }
 .section-intro h2 { font-size: 26px; }
-/* Показатели: четыре самостоятельные ровные карточки */
+
 .stat-grid, .stat-grid.two { gap: 12px; background: transparent; border: 0; }
 .stat-grid .stat-card, .stat-grid.two .stat-card {
   border: 1px solid var(--line); border-top: 3px solid #7c9bb9; min-height: 140px; padding: 21px 20px;
@@ -290,7 +290,7 @@ td { border-bottom-color: #e0e6ed; }
 }
 .status-low, .status-expense { border-left-color: #cb983e; color: #86500f; background: #fff5e7; }
 .status-income { border-left-color: #68a17e; color: #24613f; background: #eef6f0; }
-/* Кнопки и формы: немного больше контраста, но без теней и закруглений */
+/* Кнопки и формы */
 .table-actions .edit-button { background: #edf3f9; }
 .table-actions .delete-button { background: #fff3f2; }
 .table-actions .edit-button:hover { background: #dfeaf5; }
@@ -300,7 +300,7 @@ td { border-bottom-color: #e0e6ed; }
 .form-grid input, .form-grid select, .search { background: #fff; border-color: #b6c4d3; }
 .form-grid input:focus, .form-grid select:focus, .search:focus { background: #fff; border-color: #4576a4; }
 .site-footer { background: #244d78; }
-/* На узком экране карточки сохраняют отступы и отдельные рамки */
+
 @media (max-width: 820px) {
   .stat-grid, .stat-grid.two { gap: 10px; }
   .stat-grid .stat-card, .stat-grid.two .stat-card {
@@ -313,8 +313,7 @@ td { border-bottom-color: #e0e6ed; }
   .stat-number { font-size: 24px; }
   .hero-inner { padding: 28px 15px; }
 }
-/* 14. Небольшая доработка классического оформления.
-   Стандартный шрифт и прямые углы остаются без изменений. */
+
 :root { --navy: #254c74; --navy-dark: #1a3958; --page: #f2f5f8; }
 .site-header { background: #254c74; border-bottom-color: #9ab2cb; }
 .header-inner { min-height: 80px; }
