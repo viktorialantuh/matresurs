@@ -1,11 +1,14 @@
 // Папка «данные материалов и операций»: классы, описывающие материалы и складские операции.
 // Namespace оставлен техническим MatResurs.Models, чтобы не менять имена типов.
+// namespace объединяет связанные классы проекта в одну группу.
 namespace MatResurs.Models;
 
 /// <summary>Все материалы и журнал операций.</summary>
+// class — описание типа данных; InventoryData хранит весь склад и журнал операций.
 public sealed class InventoryData
 {
     // Справочник материалов: названия, цена и остатки.
+    // List<Material> — список карточек материалов, который может пополняться.
     public List<Material> Materials { get; set; } = new();
 
     // История поступления и расхода материалов.
@@ -20,6 +23,7 @@ public sealed class InventoryData
     {
         var result = new InventoryData();
         // Название, единица, цена, минимальный остаток, количество.
+        // m у 420m означает тип decimal, подходящий для цен.
         result.AddDemo("Бумага А4", "пач.", 420m, 10, 28);
         result.AddDemo("Ручка шариковая", "шт.", 35m, 20, 65);
         result.AddDemo("Папка-регистратор", "шт.", 185m, 5, 12);
@@ -39,6 +43,7 @@ public sealed class InventoryData
             MinQuantity = min,
             Quantity = quantity
         };
+        // Add записывает материал в общий список склада.
         Materials.Add(item);
 
         Operations.Add(new StockOperation
@@ -55,6 +60,7 @@ public sealed class InventoryData
 }
 
 /// <summary>Одна позиция из справочника материальных ресурсов.</summary>
+// Каждый объект Material — отдельная карточка, например «Бумага А4».
 public sealed class Material
 {
     public int Id { get; set; }                 // Уникальный номер
@@ -66,6 +72,7 @@ public sealed class Material
 }
 
 /// <summary>Одна запись о поступлении или выдаче материала.</summary>
+// StockOperation — отдельная строка истории прихода, расхода или начального остатка.
 public sealed class StockOperation
 {
     public int Id { get; set; }                 // Номер операции
