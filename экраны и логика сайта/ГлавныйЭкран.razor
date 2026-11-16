@@ -121,7 +121,7 @@
 </div>
 
 @code {
-  // Данные склада, активный раздел и сообщения
+  // Общие данные склада и значения полей формы
   private InventoryData data = InventoryData.CreateDemo();
   private string tab = "home", message = "", search = "", modalMessage = "";
   private bool error, initialized;
@@ -131,167 +131,138 @@
   private string editName = "", editUnit = "шт.", materialName = "", materialUnit = "шт.";
   private string operationType = "Приход", operationNote = "";
 
-  // Вычисляемые данные для главной страницы, поиска и таблицы
-  private Material? PendingDeleteMaterial => data.Materials.FirstOrDefault(m => m.Id == pendingDeleteId);
-  private decimal TotalValue => data.Materials.Sum(m => m.Price * m.Quantity); // Цена × количество, затем сумма
-  private int LowCount => data.Materials.Count(m => m.Quantity <= m.MinQuantity); // Материалов ниже минимума
+  // Счётчики и расчёты на экране
+  private Material? Find(int id) => data.Materials.FirstOrDefault(m => m.Id == id);
+  private bool NameExists(string name, int exceptId = 0) =>
+    data.Materials.Any(m => m.Id != exceptId && m.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+  private Material? PendingDeleteMaterial => Find(pendingDeleteId);
+  private decimal TotalValue => data.Materials.Sum(m => m.Price * m.Quantity); // Общая стоимость
+  private int LowCount => data.Materials.Count(m => m.Quantity <= m.MinQuantity); // Мало на складе
   private List<Material> FilteredMaterials => data.Materials.Where(m => m.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
   private string MessageClass => error ? "message error" : "message success";
-  private static string Money(decimal value) => value.ToString("N2", new CultureInfo("ru-RU")) + " руб.";
-  private static string Csv(string value) => "\"" + value.Replace("\"", "\"\"") + "\"";
+  private static string Money(decimal v) => v.ToString("N2", new CultureInfo("ru-RU")) + " руб.";
+  private static string Csv(string s) => "\"" + s.Replace("\"", "\"\"") + "\"";
 
-  // При запуске читаем сохранённые материалы из браузера, если они есть
+  // Читаем материалы из localStorage после запуска в браузере
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
     if (!firstRender) return;
-    try
-    {
+    try {
       var saved = await Js.InvokeAsync<string?>("matresursStorage.load");
-      if (!string.IsNullOrEmpty(saved))
-      {
+      if (!string.IsNullOrEmpty(saved)) {
         var loaded = JsonSerializer.Deserialize<InventoryData>(saved);
         if (loaded?.Materials != null && loaded.Operations != null) data = loaded;
       }
     }
-    catch (Exception) { /* Если хранилище недоступно, остаются начальные данные. */ }
-    initialized = true;
-    StateHasChanged();
+    catch (Exception) { /* Без доступа к хранилищу остаются начальные материалы. */ }
+    initialized = true; StateHasChanged();
   }
 
-  // Переход между разделами и показ ошибок
+  // Меню, сообщения, сохранение данных и очистка формы
   private void Go(string value) { tab = value; message = search = modalMessage = ""; editId = pendingDeleteId = 0; }
   private void Notify(string text, bool isError = false) { message = text; error = isError; }
-
-  // Сохранение на этом компьютере (localStorage, не сервер)
-  private async Task Persist()
-  {
+  private async Task Persist() {
     if (!initialized) return;
     try { await Js.InvokeVoidAsync("matresursStorage.save", JsonSerializer.Serialize(data)); }
     catch (Exception) { Notify("В этом браузере сохранение запрещено. Данные доступны до обновления страницы.", true); }
   }
-
-  private void ClearMaterialForm()
-  {
+  private void ClearMaterialForm() {
     materialName = ""; materialUnit = "шт."; materialPrice = materialMinimum = 0;
     materialInitialQuantity = null;
   }
 
-  // Редактирование: открываем окно и подставляем сведения о выбранном материале
-  private async Task Edit(Material material)
-  {
-    var item = data.Materials.FirstOrDefault(m => m.Id == material.Id);
+  // Редактирование карточки материала
+  private async Task Edit(Material material) {
+    var item = Find(material.Id);
     if (item == null) { Notify("Материал не найден.", true); return; }
     pendingDeleteId = 0; editId = item.Id; editName = item.Name;
     editUnit = item.Unit; editPrice = item.Price; editMinimum = item.MinQuantity; modalMessage = "";
     await Js.InvokeVoidAsync("matresursDialogs.show", "material-edit-dialog");
   }
-
-  private async Task CloseEdit()
-  {
-    await Js.InvokeVoidAsync("matresursDialogs.close", "material-edit-dialog");
-    OnEditDialogClosed();
+  private async Task CloseEdit() {
+    await Js.InvokeVoidAsync("matresursDialogs.close", "material-edit-dialog"); OnEditDialogClosed();
   }
   private void OnEditDialogClosed() { editId = 0; modalMessage = ""; }
-
-  // Проверяем поля и сохраняем изменения, не трогая количество на складе
-  private async Task SaveEditedMaterial()
-  {
-    var item = data.Materials.FirstOrDefault(m => m.Id == editId);
+  private async Task SaveEditedMaterial() {
+    var item = Find(editId);
     if (item == null) { modalMessage = "Материал не найден. Закрой окно и обнови список."; return; }
     var name = editName.Trim();
     if (name.Length < 2) { modalMessage = "Название должно содержать минимум два символа."; return; }
     if (editPrice < 0 || editMinimum < 0) { modalMessage = "Цена и минимальный остаток не могут быть отрицательными."; return; }
-    if (data.Materials.Any(m => m.Id != editId && m.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
-    { modalMessage = "Материал с таким названием уже есть."; return; }
+    if (NameExists(name, editId)) { modalMessage = "Материал с таким названием уже есть."; return; }
     item.Name = name; item.Unit = editUnit; item.Price = editPrice; item.MinQuantity = editMinimum;
-    await CloseEdit();
-    Notify($"Материал «{item.Name}» успешно изменён.");
-    await Persist();
+    await CloseEdit(); Notify($"Материал «{item.Name}» успешно изменён."); await Persist();
   }
 
-  // Удаление требует подтверждения; журнал прежних операций остаётся
-  private async Task DeleteMaterial(Material material)
-  {
-    var item = data.Materials.FirstOrDefault(m => m.Id == material.Id);
+  // Удаляем только после подтверждения; история операций остаётся
+  private async Task DeleteMaterial(Material material) {
+    var item = Find(material.Id);
     if (item == null) { Notify("Материал не найден.", true); return; }
     editId = 0; modalMessage = ""; pendingDeleteId = item.Id;
     await Js.InvokeVoidAsync("matresursDialogs.show", "material-delete-dialog");
   }
-  private async Task CancelDelete()
-  {
-    await Js.InvokeVoidAsync("matresursDialogs.close", "material-delete-dialog");
-    OnDeleteDialogClosed();
+  private async Task CancelDelete() {
+    await Js.InvokeVoidAsync("matresursDialogs.close", "material-delete-dialog"); OnDeleteDialogClosed();
   }
   private void OnDeleteDialogClosed() => pendingDeleteId = 0;
-  private async Task ConfirmDeleteMaterial()
-  {
+  private async Task ConfirmDeleteMaterial() {
     int id = pendingDeleteId;
     await CancelDelete();
-    var item = data.Materials.FirstOrDefault(m => m.Id == id);
+    var item = Find(id);
     if (item == null) { Notify("Материал уже удалён или не найден.", true); return; }
     data.Materials.Remove(item);
     if (selectedMaterial == id) selectedMaterial = 0;
-    Notify($"Материал «{item.Name}» удалён. История операций сохранена.");
-    await Persist();
+    Notify($"Материал «{item.Name}» удалён. История операций сохранена."); await Persist();
   }
 
-  // Добавление материала с проверкой названия, цены и начального остатка
-  private async Task SaveMaterial()
-  {
+  // Добавление материала с проверкой цены, количества и названия
+  private async Task SaveMaterial() {
     string name = materialName.Trim();
     if (name.Length < 2) { Notify("Укажи название материала (не менее двух символов).", true); return; }
     if (materialPrice < 0 || materialMinimum < 0) { Notify("Цена и минимальный остаток не могут быть отрицательными.", true); return; }
     if (materialInitialQuantity < 0) { Notify("Начальное количество не может быть отрицательным.", true); return; }
-    if (data.Materials.Any(m => m.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
-    { Notify("Такой материал уже существует.", true); return; }
+    if (NameExists(name)) { Notify("Такой материал уже существует.", true); return; }
     int start = materialInitialQuantity ?? 0;
     data.Materials.Add(new Material {
       Id = data.NextMaterialId++, Name = name, Unit = materialUnit, Price = materialPrice,
       MinQuantity = materialMinimum, Quantity = start
     });
-    if (start > 0)
-      data.Operations.Add(new StockOperation {
-        Id = data.NextOperationId++, At = DateTime.Now, MaterialName = name, Type = "Начальный остаток",
-        Quantity = start, BalanceAfter = start, Note = "Добавление материала"
-      });
-    ClearMaterialForm();
-    Notify("Материал добавлен. Начальное количество сохранено.");
-    await Persist();
+    if (start > 0) data.Operations.Add(new StockOperation {
+      Id = data.NextOperationId++, At = DateTime.Now, MaterialName = name, Type = "Начальный остаток",
+      Quantity = start, BalanceAfter = start, Note = "Добавление материала"
+    });
+    ClearMaterialForm(); Notify("Материал добавлен. Начальное количество сохранено."); await Persist();
   }
 
-  // Приход прибавляет количество, расход вычитает, отрицательный остаток запрещён
-  private async Task MakeOperation()
-  {
-    var item = data.Materials.FirstOrDefault(m => m.Id == selectedMaterial);
+  // Приход прибавляет количество, расход уменьшает; нельзя списать лишнее
+  private async Task MakeOperation() {
+    var item = Find(selectedMaterial);
     if (item == null) { Notify("Сначала выбери материал.", true); return; }
-    if (!operationQuantity.HasValue || operationQuantity.Value <= 0)
-    { Notify("Укажи количество больше нуля.", true); return; }
+    if (!operationQuantity.HasValue || operationQuantity.Value <= 0) { Notify("Укажи количество больше нуля.", true); return; }
     int quantity = operationQuantity.Value;
-    if (operationType == "Расход" && quantity > item.Quantity)
-    { Notify($"Недостаточно материала на складе: доступно {item.Quantity} {item.Unit}.", true); return; }
+    if (operationType == "Расход" && quantity > item.Quantity) {
+      Notify($"Недостаточно материала на складе: доступно {item.Quantity} {item.Unit}.", true); return;
+    }
     try { item.Quantity = checked(item.Quantity + (operationType == "Приход" ? quantity : -quantity)); }
     catch (OverflowException) { Notify("Слишком большое количество.", true); return; }
     data.Operations.Add(new StockOperation {
-      Id = data.NextOperationId++, At = DateTime.Now, MaterialName = item.Name,
-      Type = operationType, Quantity = quantity, BalanceAfter = item.Quantity, Note = operationNote.Trim()
+      Id = data.NextOperationId++, At = DateTime.Now, MaterialName = item.Name, Type = operationType,
+      Quantity = quantity, BalanceAfter = item.Quantity, Note = operationNote.Trim()
     });
     Notify($"Готово! {operationType}: {quantity} {item.Unit}. Остаток: {item.Quantity}.");
-    selectedMaterial = 0; operationQuantity = null; operationNote = "";
-    await Persist();
+    selectedMaterial = 0; operationQuantity = null; operationNote = ""; await Persist();
   }
 
-  // Сброс с подтверждением: возвращаем исходные материалы
-  private async Task ResetDemo()
-  {
+  // Сброс данных после подтверждения
+  private async Task ResetDemo() {
     if (!await Js.InvokeAsync<bool>("matresursStorage.askReset")) return;
     data = InventoryData.CreateDemo(); ClearMaterialForm();
     selectedMaterial = 0; operationQuantity = null; operationNote = ""; message = "";
     await Persist(); Go("home");
   }
 
-  // CSV — таблица для Excel; данные разделены точкой с запятой
-  private async Task ExportReport()
-  {
+  // Скачиваем CSV-отчёт, который можно открыть в Excel
+  private async Task ExportReport() {
     var csv = new StringBuilder("Наименование;Единица;Количество;Цена;Стоимость\r\n");
     foreach (var m in data.Materials.OrderBy(m => m.Name))
       csv.AppendLine($"{Csv(m.Name)};{Csv(m.Unit)};{m.Quantity};{m.Price.ToString(CultureInfo.InvariantCulture)};{(m.Price * m.Quantity).ToString(CultureInfo.InvariantCulture)}");
