@@ -50,7 +50,7 @@
       @if (tab == "home")
       {
         @* Главная: показатели склада и общие остатки. *@
-        <div class="section-intro"><div><h2>Склад в цифрах</h2><p>Актуальные показатели по материалам</p></div><span class="demo-label">Демо-данные</span></div>
+        <div class="section-intro"><div><h2>Склад в цифрах</h2><p>Актуальные показатели по материалам</p></div></div>
         <div class="stat-grid">
           <div class="stat-card"><div class="stat-label">Наименований</div><div class="stat-number">@data.Materials.Count</div><div class="stat-help">В справочнике материалов</div></div>
           <div class="stat-card"><div class="stat-label">Единиц на складе</div><div class="stat-number">@data.Materials.Sum(m => m.Quantity)</div><div class="stat-help">Текущий остаток</div></div>
