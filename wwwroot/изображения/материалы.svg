@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="260" viewBox="0 0 420 260" role="img" aria-label="Иллюстрация раздела информационной системы">
+ <defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe2f3"/><stop offset="1" stop-color="#e9dcff"/></linearGradient>
+  <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ca8cec"/><stop offset="1" stop-color="#8651bb"/></linearGradient>
+  <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffa8cb"/><stop offset="1" stop-color="#e96aa5"/></linearGradient>
+  <linearGradient id="box" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdeb4"/><stop offset="1" stop-color="#eeb783"/></linearGradient>
+ </defs>
+ <ellipse cx="210" cy="222" rx="175" ry="16" fill="#bb8ecf" opacity=".19"/>
+ <rect x="38" y="29" width="344" height="188" rx="76" fill="url(#bg)" opacity=".83"/>
+ 
+ <rect x="106" y="76" width="16" height="135" rx="5" fill="#7451aa"/>
+ <rect x="302" y="76" width="16" height="135" rx="5" fill="#7451aa"/>
+ <rect x="103" y="133" width="219" height="13" rx="4" fill="#946ac2"/>
+ <rect x="103" y="204" width="219" height="13" rx="4" fill="#946ac2"/>
+ <rect x="130" y="85" width="66" height="46" rx="5" fill="url(#box)"/>
+ <path d="M130 90l33-13 33 13M163 77v54" stroke="#d3986a" stroke-width="3" fill="none"/>
+ <rect x="208" y="87" width="20" height="44" rx="3" fill="#ef7cae"/>
+ <rect x="233" y="81" width="21" height="50" rx="3" fill="#8e59c5"/>
+ <rect x="259" y="91" width="26" height="40" rx="3" fill="#ba82e8"/>
+ <path d="M216 104v15M243 100v19M272 106v13" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+ <rect x="137" y="157" width="72" height="45" rx="5" fill="url(#box)"/>
+ <path d="M137 162l35-13 37 13M173 149v53" stroke="#d3986a" stroke-width="3" fill="none"/>
+ <rect x="224" y="151" width="71" height="51" rx="5" fill="url(#pink)"/>
+ <rect x="237" y="166" width="44" height="15" rx="4" fill="#fff" opacity=".85"/>
+ <path d="M247 173h25" stroke="#a24d90" stroke-width="3" stroke-linecap="round"/>
+ <circle cx="337" cy="69" r="20" fill="#fff" opacity=".7"/><path d="M327 69h20m-10-10v20" stroke="#ad6fc1" stroke-width="4" stroke-linecap="round"/>
+
+</svg>

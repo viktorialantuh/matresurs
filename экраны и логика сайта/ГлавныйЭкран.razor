@@ -59,7 +59,7 @@
       else if (tab == "materials")
       {
         @* Материалы: форма добавления, редактирование и поиск. *@
-<div class="page-top"><div><div class="eyebrow">СПРАВОЧНИК</div><h1>Материалы</h1><p>Добавляй материалы и отслеживай их количество.</p></div></div> <div class="panel form-panel"><h2>Добавить материал</h2> <div class="form-grid">
+<div class="page-top"><div><div class="eyebrow">СПРАВОЧНИК</div><h1>Материалы</h1><p>Добавляй материалы и отслеживай их количество.</p></div><img class="section-illustration" src="изображения/материалы.svg" alt="Рисунок коробок и папок на полке" /></div> <div class="panel form-panel"><h2>Добавить материал</h2> <div class="form-grid">
             @* @bind связывает поле ввода с переменной materialName в блоке @code ниже. *@
 <label>Название<input placeholder="Например: Бумага А4" @bind="materialName" /></label> <label>Единица измерения<select @bind="materialUnit"><option>шт.</option><option>пач.</option><option>кг</option><option>л</option><option>м</option><option>упак.</option></select></label> <label>Цена, руб.<input type="number" min="0" step="0.01" @bind="materialPrice" /></label>
 <label>Минимальный остаток<input type="number" min="0" step="1" @bind="materialMinimum" /></label>
@@ -71,7 +71,7 @@
       else if (tab == "operation")
       {
         @* Операции: приход увеличивает остаток, расход уменьшает. *@
-<div class="page-top"><div><div class="eyebrow">СКЛАДСКОЙ УЧЁТ</div><h1>Приход и расход</h1><p>Оформи поступление или выдачу со склада.</p></div></div> <div class="panel form-panel narrow-panel"><h2>Новая операция</h2>
+<div class="page-top"><div><div class="eyebrow">СКЛАДСКОЙ УЧЁТ</div><h1>Приход и расход</h1><p>Оформи поступление или выдачу со склада.</p></div><img class="section-illustration" src="изображения/операции.svg" alt="Коробки и стрелки поступления и выдачи материалов" /></div> <div class="panel form-panel narrow-panel"><h2>Новая операция</h2>
 <div class="type-switch"><button class="@(operationType == "Приход" ? "active" : "")" @onclick='() => operationType = "Приход"'>Приход</button><button class="@(operationType == "Расход" ? "active" : "")" @onclick='() => operationType = "Расход"'>Расход</button></div> <div class="form-grid single">
             <label>Материал<select @bind="selectedMaterial"><option value="0">Выбери материал</option>@foreach (var item in data.Materials.OrderBy(m => m.Name)) { <option value="@item.Id">@item.Name (@item.Quantity @item.Unit)</option> }</select></label>
 <label>Количество<input type="number" min="1" step="1" @bind="operationQuantity" /></label> <label>Комментарий (необязательно)<input placeholder="Например: Для отдела снабжения" @bind="operationNote" /></label> </div>
@@ -83,7 +83,7 @@
       else if (tab == "history")
       {
         @* История: журнал всех движений материалов. *@
-<div class="page-top"><div><div class="eyebrow">ЖУРНАЛ</div><h1>История операций</h1><p>Все поступления и выдачи с датой и остатком после операции.</p></div></div> <div class="panel"><div class="panel-title-row"><h2>Журнал движений</h2><span class="subtle">Всего записей: @data.Operations.Count</span></div>
+<div class="page-top"><div><div class="eyebrow">ЖУРНАЛ</div><h1>История операций</h1><p>Все поступления и выдачи с датой и остатком после операции.</p></div><img class="section-illustration" src="изображения/история.svg" alt="Рисунок журнала операций и часов" /></div> <div class="panel"><div class="panel-title-row"><h2>Журнал движений</h2><span class="subtle">Всего записей: @data.Operations.Count</span></div>
 <div class="table-wrap"><table><thead><tr><th>Дата</th><th>Материал</th><th>Операция</th><th>Количество</th><th>Остаток</th><th>Комментарий</th></tr></thead><tbody>
             @foreach(var op in data.Operations.OrderByDescending(o => o.At).ThenByDescending(o => o.Id))
             { <tr><td>@op.At.ToString("dd.MM.yyyy HH:mm")</td><td class="strong-cell">@op.MaterialName</td><td><span class="@(op.Type == "Расход" ? "status status-expense" : "status status-income")">@op.Type</span></td><td>@op.Quantity</td><td>@op.BalanceAfter</td><td>@op.Note</td></tr> }
@@ -92,7 +92,7 @@
       else if (tab == "report")
       {
         @* Отчёт: список остатков и экспорт . *@
-<div class="page-top"><div><div class="eyebrow">АНАЛИТИКА</div><h1>Отчёт по остаткам</h1><p>Сводная стоимость материалов и список товаров.</p></div><button class="primary-button" @onclick="ExportReport">Скачать отчет</button></div>
+<div class="page-top"><div><div class="eyebrow">АНАЛИТИКА</div><h1>Отчёт по остаткам</h1><p>Сводная стоимость материалов и список товаров.</p></div><div class="page-actions"><img class="section-illustration" src="изображения/отчет.svg" alt="Рисунок ведомости и диаграммы" /><button class="primary-button" @onclick="ExportReport">Скачать отчет</button></div></div>
 <div class="stat-grid two"><div class="stat-card"><div class="stat-label">Всего позиций</div><div class="stat-number">@data.Materials.Count</div></div><div class="stat-card"><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div></div></div>
 <div class="panel"><div class="panel-title-row"><h2>Ведомость остатков</h2><span class="subtle">Дата: @DateTime.Now.ToString("dd.MM.yyyy")</span></div> <div class="table-wrap"><table><thead><tr><th>Наименование</th><th>Ед.</th><th>Количество</th><th>Цена</th><th>Стоимость</th></tr></thead><tbody>
             @foreach (var m in data.Materials.OrderBy(m => m.Name)) { <tr><td class="strong-cell">@m.Name</td><td>@m.Unit</td><td>@m.Quantity</td><td>@Money(m.Price)</td><td>@Money(m.Price * m.Quantity)</td></tr> }

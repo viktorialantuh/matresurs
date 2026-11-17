@@ -463,3 +463,23 @@ th { background: linear-gradient(115deg, #fbe6f5, #f2e3fc); }
   .menu-glyph { width: 21px; height: 21px; flex-basis: 21px; }
   .hero-illustration { max-height: 180px; }
 }
+
+/* ===== Иллюстрации разделов сайта ===== */
+/* Картинки являются декоративными и не влияют на расчёты. */
+.page-top > div:first-child { min-width: 0; flex: 1 1 340px; }
+.section-illustration {
+  display: block;
+  width: 195px;
+  max-width: 31%;
+  height: 128px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+.page-actions { display: flex; align-items: center; gap: 18px; }
+.page-actions .section-illustration { max-width: none; width: 150px; height: 110px; }
+.hero-illustration { max-height: 245px; }
+@media (max-width: 620px) {
+  .section-illustration { max-width: 40%; width: 125px; height: 90px; }
+  .page-actions { width: 100%; justify-content: space-between; }
+  .page-actions .section-illustration { width: 105px; height: 82px; }
+}

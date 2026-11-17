@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="260" viewBox="0 0 420 260" role="img" aria-label="Иллюстрация раздела информационной системы">
+ <defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe2f3"/><stop offset="1" stop-color="#e9dcff"/></linearGradient>
+  <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ca8cec"/><stop offset="1" stop-color="#8651bb"/></linearGradient>
+  <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffa8cb"/><stop offset="1" stop-color="#e96aa5"/></linearGradient>
+  <linearGradient id="box" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdeb4"/><stop offset="1" stop-color="#eeb783"/></linearGradient>
+ </defs>
+ <ellipse cx="210" cy="222" rx="175" ry="16" fill="#bb8ecf" opacity=".19"/>
+ <rect x="38" y="29" width="344" height="188" rx="76" fill="url(#bg)" opacity=".83"/>
+ 
+ <rect x="75" y="116" width="95" height="83" rx="7" fill="url(#box)"/>
+ <path d="M75 129l47-18 48 18M122 111v88" stroke="#d39a66" stroke-width="4" fill="none"/>
+ <rect x="248" y="116" width="95" height="83" rx="7" fill="url(#pink)"/>
+ <path d="M248 129l47-18 48 18M295 111v88" stroke="#c65f95" stroke-width="4" fill="none"/>
+ <path d="M156 88H271m-17-16 17 16-17 16" fill="none" stroke="#9254b4" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M263 221H146m17-16-17 16 17 16" fill="none" stroke="#d970a5" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M107 159v17m-7-7 7 7 7-7" fill="none" stroke="#a67a58" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M279 175v-17m-7 7 7-7 7 7" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+</svg>
