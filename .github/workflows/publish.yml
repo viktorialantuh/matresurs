@@ -38,6 +38,7 @@ jobs:
           cp "стили/ОформлениеСайта.css" "wwwroot/стили/ОформлениеСайта.css"
           cp "стили/ОформлениеСайта.css" "wwwroot/matresurs-style.css"
           cp "стили/ОформлениеСайта.css" "wwwroot/matresurs-terra-20261118.css"
+          cp "стили/ОформлениеСайта.css" "wwwroot/matresurs-bordo-20261118.css"
           cp "Скрипты( сохранение данных и скачивание отчётов)/СохранениеИОтчёты.js" "wwwroot/Скрипты( сохранение данных и скачивание отчётов)/СохранениеИОтчёты.js"
 
       # Компилируем C# и Razor в статические файлы сайта.
@@ -63,6 +64,7 @@ jobs:
           cp publish/wwwroot/index.html publish/wwwroot/myatnaya-versiya.html
           cp publish/wwwroot/index.html publish/wwwroot/proverka-novogo-dizaina.html
           cp publish/wwwroot/index.html publish/wwwroot/terrakotovyy-dizain.html
+          cp publish/wwwroot/index.html publish/wwwroot/bordovaya-versiya.html
           echo "Base path: $BASE"
       # Последние действия: подготовить Pages, загрузить файлы, опубликовать.
       - name: Setup GitHub Pages

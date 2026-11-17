@@ -64,3 +64,5 @@
 Для проверки новой версии в обход кеша используется отдельный адрес: https://viktorialantuh.github.io/matresurs/proverka-novogo-dizaina.html. Стиль автоматически копируется в `wwwroot/matresurs-style.css` при публикации.
 
 Обновление оформления от 18.11.2026: бежево-терракотовая гамма и отдельная страница https://viktorialantuh.github.io/matresurs/terrakotovyy-dizain.html; стиль копируется в `matresurs-terra-20261118.css`.
+
+18.11.2026: новая бордово-молочная гамма, без градиентов; страница проверки: https://viktorialantuh.github.io/matresurs/bordovaya-versiya.html.
