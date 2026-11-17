@@ -366,56 +366,58 @@ tfoot td { border-top: 2px solid #9db1c6; }
   display: none !important; content: none !important;
 }
 .build-version { font-size: 12px; line-height: 1.35; color: #dce8f5; }
-/* ===== Новая тема: светлая мята и тёплый кремовый цвет ===== */
-/* Все пять пунктов меню увеличены и не содержат значков. */
+/* Простая тема без эффектов: спокойный синий, белый и светло-серый. */
+/* Привычное оформление учебной информационной системы. */
 :root {
-  --navy: #48796f;
-  --navy-dark: #315b50;
-  --page: #f8fbf7;
-  --text: #303e3a;
-  --muted: #64776e;
-  --line: #d8e6dc;
+  --navy: #315575;
+  --navy-dark: #233f59;
+  --page: #f2f4f6;
+  --text: #28343d;
+  --muted: #66747d;
+  --line: #d5dde4;
 }
-body { background: linear-gradient(125deg, #ffffff, #f0faf3 53%, #fff7eb) fixed; }
+html, body { background: #f2f4f6; color: var(--text); }
 .site-header {
-  color: #315a4d;
-  background: linear-gradient(110deg, #e3f5e9 0%, #f1faed 53%, #fff0d9 100%);
-  border-bottom: 2px solid #c5e4d1;
+  color: #283f51;
+  background: #e8edf2;
+  border-bottom: 2px solid #c5d0db;
 }
-.header-inner { min-height: 98px; gap: 18px; }
-.brand, .brand b { color: #345f54; }
+.header-inner { min-height: 94px; gap: 17px; }
+.brand, .brand b { color: #284b66; }
 .brand b { font-size: 29px; }
-.brand small { color: #64776c; font-size: 15px; }
-.side-nav { gap: 7px; }
+.brand small { font-size: 15px; color: #657782; }
+.side-nav { gap: 5px; }
 .side-nav button {
   min-height: 56px;
-  padding: 12px 19px;
+  padding: 11px 18px;
   font-size: 20px;
   font-weight: bold;
-  color: #345d51;
+  color: #294a64;
   background: transparent;
   border: 1px solid transparent;
 }
-.side-nav button:hover { background: #f5fffa; border-color: #b6d9c5; }
+.side-nav button:hover {
+  color: #26435b;
+  background: #dbe4eb;
+  border-color: #b9cad7;
+}
 .side-nav button.selected, .side-nav button.selected:hover {
-  color: #24584a;
+  color: #234b69;
   background: #fff;
-  border: 1px solid #bbdacb;
-  border-bottom: 3px solid #72b598;
+  border: 1px solid #b5c6d4;
+  border-bottom: 3px solid #537c9b;
 }
-/* Главная страница без больших декоративных значков */
 .hero-banner {
-  background: linear-gradient(115deg, #eaf8ec 0%, #f6fbf3 55%, #fff5e7 100%);
-  border-bottom: 1px solid #d7e7d8;
+  background: #eaf0f5;
+  border-bottom: 1px solid #d0dce4;
 }
-.hero-copy h1 { color: #315d52; }
-.hero-kicker { color: #5c8772; font-weight: bold; letter-spacing: .4px; }
+.hero-copy h1 { color: #284961; }
+.hero-kicker { color: #58748b; font-weight: bold; letter-spacing: 0; }
 .hero-card {
-  background: linear-gradient(150deg, #fff, #f7fbf5);
-  border: 1px solid #d3e8d7;
-  border-left: 4px solid #86bca4;
+  background: #fff;
+  border: 1px solid #d1dce6;
+  border-left: 4px solid #6e93ae;
 }
-/* Оставлен только небольшой рисунок склада в верхнем блоке. */
 .hero-illustration {
   display: block;
   width: 72%;
@@ -425,40 +427,46 @@ body { background: linear-gradient(125deg, #ffffff, #f0faf3 53%, #fff7eb) fixed;
   margin: 0 auto 14px;
 }
 .features-band {
-  background: linear-gradient(150deg, #fff 0%, #f7fbf7 100%);
-  border-top: 3px solid #a5cdb2;
+  background: #fff;
+  border: 1px solid #d2dce5;
+  border-top: 3px solid #7d9db6;
 }
 .feature-card { padding-top: 8px; }
 .stat-grid .stat-card, .stat-grid.two .stat-card {
-  background: linear-gradient(145deg, #fff, #f7fcf8);
+  background: #fff;
+  border-top-color: #7a96ac;
 }
-.panel, .page-top { background: linear-gradient(145deg, #fff, #fcfefa); }
-.page-top { border-left-color: #9fcdb2; }
-th { background: linear-gradient(110deg, #eaf7ee, #fff5e8); }
+.panel, .page-top { background: #fff; }
+.page-top { border-left: 4px solid #829fb5; }
+th { background: #e8edf1; color: #284961; }
 .primary-button, .hero-primary {
-  color: white;
-  border-color: #4c866d;
-  background: linear-gradient(110deg, #558d74, #75a88b);
+  color: #fff;
+  background: #315b7b;
+  border: 1px solid #315b7b;
 }
-.primary-button:hover, .hero-primary:hover {
-  background: linear-gradient(110deg, #407b62, #60967b);
-}
-.type-switch button.active { background: linear-gradient(110deg, #548e75, #78ae8c); }
+.primary-button:hover, .hero-primary:hover { background: #264b69; border-color: #264b69; }
+.type-switch button.active { background: #315b7b; color: #fff; }
 .site-footer {
-  color: #31584b;
-  background: linear-gradient(110deg, #e7f6e9, #fff3df);
-  border-top: 2px solid #c3e2cd;
+  color: #2e485e;
+  background: #e8edf2;
+  border-top: 2px solid #ced8e2;
 }
-.footer-author, .footer-author strong { color: #335747; }
-.footer-project span { color: #64766c; }
-.footer-reset { color: #345d4e; border-color: #aecfb9; }
-.footer-reset:hover { background: #ddefe1; }
-/* На телефоне названия остаются большими и прокручиваются горизонтально. */
+.footer-author, .footer-author strong { color: #2d485e; }
+.footer-project span { color: #63798a; }
+.footer-reset { color: #36536a; border-color: #b1c3d0; }
+.footer-reset:hover { background: #d9e3ec; }
 @media (max-width: 620px) {
   .side-nav { justify-content: flex-start; gap: 5px; }
-  .side-nav button { min-height: 50px; padding: 10px 14px; font-size: 18px; }
+  .side-nav button { min-height: 50px; padding: 9px 14px; font-size: 18px; }
   .hero-illustration { max-height: 96px; }
 }
+
+/* Сброс оставшихся цветных акцентов предыдущей темы. */
+.section-intro h2, .panel-title-row h2, .features-heading h2, h1, h2, h3 { color: #284961; }
+.stat-number, .strong-cell { color: #294e69; }
+.stat-card:nth-child(n) { border-top-color: #849fb2; }
+tbody tr:hover { background: #f0f4f7; }
+.stat-help { color: #66747d; }
 
 /* Картинки в карточках и разделах: небольшие тематические рисунки, не иконки меню. */
 .feature-picture {
