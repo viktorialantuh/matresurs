@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="420" height="260" viewBox="0 0 420 260" role="img" aria-label="Иллюстрация раздела информационной системы">
  <defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe2f3"/><stop offset="1" stop-color="#e9dcff"/></linearGradient>
-  <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ca8cec"/><stop offset="1" stop-color="#8651bb"/></linearGradient>
-  <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffa8cb"/><stop offset="1" stop-color="#e96aa5"/></linearGradient>
-  <linearGradient id="box" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdeb4"/><stop offset="1" stop-color="#eeb783"/></linearGradient>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e7f3ff"/><stop offset="1" stop-color="#efebff"/></linearGradient>
+  <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#adbbeb"/><stop offset="1" stop-color="#788abe"/></linearGradient>
+  <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c2dafa"/><stop offset="1" stop-color="#8daedc"/></linearGradient>
+  <linearGradient id="box" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe4c3"/><stop offset="1" stop-color="#e1b88d"/></linearGradient>
  </defs>
  <ellipse cx="210" cy="222" rx="175" ry="16" fill="#bb8ecf" opacity=".19"/>
  <rect x="38" y="29" width="344" height="188" rx="76" fill="url(#bg)" opacity=".83"/>
@@ -11,13 +11,13 @@
  <rect x="124" y="49" width="173" height="160" rx="10" fill="url(#purple)"/>
  <rect x="134" y="61" width="152" height="138" rx="6" fill="#fffaff"/>
  <path d="M151 88h88M151 102h67" stroke="#cbaddd" stroke-width="7" stroke-linecap="round"/>
- <rect x="154" y="137" width="22" height="48" rx="5" fill="#e985b7"/>
- <rect x="187" y="121" width="22" height="64" rx="5" fill="#ba76d8"/>
- <rect x="220" y="105" width="22" height="80" rx="5" fill="#945ac6"/>
+ <rect x="154" y="137" width="22" height="48" rx="5" fill="#a1b9eb"/>
+ <rect x="187" y="121" width="22" height="64" rx="5" fill="#b0a8e0"/>
+ <rect x="220" y="105" width="22" height="80" rx="5" fill="#817fbf"/>
  <path d="M144 186h115" stroke="#ac94c3" stroke-width="4" stroke-linecap="round"/>
- <circle cx="280" cy="160" r="42" fill="#ffebf5" stroke="#fff" stroke-width="6"/>
- <path d="M280 160V121a39 39 0 0 1 38 40Z" fill="#ea82b4"/>
- <path d="M280 160l27 28a39 39 0 0 1-60-5Z" fill="#aa6ac8"/>
- <path d="M280 160l-33 23a39 39 0 0 1 33-62Z" fill="#f5b5d5"/>
+ <circle cx="280" cy="160" r="42" fill="#eef3ff" stroke="#fff" stroke-width="6"/>
+ <path d="M280 160V121a39 39 0 0 1 38 40Z" fill="#9ab6e8"/>
+ <path d="M280 160l27 28a39 39 0 0 1-60-5Z" fill="#aaa0d8"/>
+ <path d="M280 160l-33 23a39 39 0 0 1 33-62Z" fill="#d5e6ff"/>
 
 </svg>
