@@ -13,7 +13,18 @@
   <base href="/" />
 
   <!-- Внешний вид сайта: CSS-файл в русской папке «стили». -->
-  <link rel="stylesheet" href="стили/ОформлениеСайта.css?v=20261118-natural-blue-v7" />
+  <link rel="stylesheet" href="matresurs-style.css?v=20261118-klassicheskiy-v8" />
+
+  <!-- Базовые цвета дублируются здесь на случай старого стиля браузера. -->
+  <style>
+    html, body { background: #f2f4f6 !important; }
+    .site-header { background: #e8edf2 !important; border-bottom: 2px solid #c5d0db !important; }
+    .brand, .brand b { color: #284b66 !important; }
+    .brand small { color: #657782 !important; }
+    .side-nav button { font-size: 20px !important; color: #294a64 !important; }
+    .side-nav button.selected { background: #fff !important; color: #234b69 !important; }
+  </style>
+
 </head>
 <body>
   <!-- В этот элемент Blazor вставляет экран, написанный на C#. -->
@@ -48,6 +59,6 @@
   </script>
 
   <!-- Версия скрипта меняется вместе с приложением для обновления кэша. -->
-  <script src="_framework/blazor.webassembly.js?v=20261118-natural-blue-v7"></script>
+  <script src="_framework/blazor.webassembly.js?v=20261118-klassicheskiy-v8"></script>
 </body>
 </html>

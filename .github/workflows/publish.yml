@@ -36,6 +36,7 @@ jobs:
         run: |
           mkdir -p "wwwroot/стили" "wwwroot/Скрипты( сохранение данных и скачивание отчётов)"
           cp "стили/ОформлениеСайта.css" "wwwroot/стили/ОформлениеСайта.css"
+          cp "стили/ОформлениеСайта.css" "wwwroot/matresurs-style.css"
           cp "Скрипты( сохранение данных и скачивание отчётов)/СохранениеИОтчёты.js" "wwwroot/Скрипты( сохранение данных и скачивание отчётов)/СохранениеИОтчёты.js"
 
       # Компилируем C# и Razor в статические файлы сайта.
@@ -59,6 +60,7 @@ jobs:
           # Отдельный адрес для проверки нового оформления без старой кэшированной страницы.
           cp publish/wwwroot/index.html publish/wwwroot/svetlaya-versiya.html
           cp publish/wwwroot/index.html publish/wwwroot/myatnaya-versiya.html
+          cp publish/wwwroot/index.html publish/wwwroot/proverka-novogo-dizaina.html
           echo "Base path: $BASE"
       # Последние действия: подготовить Pages, загрузить файлы, опубликовать.
       - name: Setup GitHub Pages
