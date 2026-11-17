@@ -13,16 +13,19 @@
   <base href="/" />
 
   <!-- Внешний вид сайта: CSS-файл в русской папке «стили». -->
-  <link rel="stylesheet" href="matresurs-style.css?v=20261118-klassicheskiy-v8" />
+  <link rel="stylesheet" href="matresurs-terra-20261118.css" />
 
-  <!-- Базовые цвета дублируются здесь на случай старого стиля браузера. -->
+  <!-- Цвета продублированы здесь, чтобы старая тема из кэша не перекрыла новую. -->
   <style>
-    html, body { background: #f2f4f6 !important; }
-    .site-header { background: #e8edf2 !important; border-bottom: 2px solid #c5d0db !important; }
-    .brand, .brand b { color: #284b66 !important; }
-    .brand small { color: #657782 !important; }
-    .side-nav button { font-size: 20px !important; color: #294a64 !important; }
-    .side-nav button.selected { background: #fff !important; color: #234b69 !important; }
+    html, body { background: #f8f2e9 !important; }
+    .site-header { background: #78503f !important; border-bottom: 3px solid #ad7459 !important; }
+    .brand, .brand b { color: #fff !important; }
+    .brand small { color: #f2e0d1 !important; }
+    .side-nav button { font-size: 20px !important; color: #fff !important; }
+    .side-nav button.selected { background: #fff6ed !important; color: #69402e !important; }
+    .hero-banner { background: #f1e2d0 !important; }
+    .primary-button, .hero-primary { background: #a96243 !important; color: #fff !important; }
+    .site-footer { background: #ead6c1 !important; }
   </style>
 
 </head>
@@ -59,6 +62,6 @@
   </script>
 
   <!-- Версия скрипта меняется вместе с приложением для обновления кэша. -->
-  <script src="_framework/blazor.webassembly.js?v=20261118-klassicheskiy-v8"></script>
+  <script src="_framework/blazor.webassembly.js?v=terra-20261118-v9"></script>
 </body>
 </html>

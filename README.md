@@ -62,3 +62,5 @@
 Пункты меню оставлены увеличенными для удобства. В главной части и рабочих разделах остаются небольшие тематические иллюстрации.
 
 Для проверки новой версии в обход кеша используется отдельный адрес: https://viktorialantuh.github.io/matresurs/proverka-novogo-dizaina.html. Стиль автоматически копируется в `wwwroot/matresurs-style.css` при публикации.
+
+Обновление оформления от 18.11.2026: бежево-терракотовая гамма и отдельная страница https://viktorialantuh.github.io/matresurs/terrakotovyy-dizain.html; стиль копируется в `matresurs-terra-20261118.css`.

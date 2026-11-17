@@ -366,57 +366,56 @@ tfoot td { border-top: 2px solid #9db1c6; }
   display: none !important; content: none !important;
 }
 .build-version { font-size: 12px; line-height: 1.35; color: #dce8f5; }
-/* Простая тема без эффектов: спокойный синий, белый и светло-серый. */
-/* Привычное оформление учебной информационной системы. */
+/* Тёплая классическая тема: бежевый и терракотовый, без градиентов. */
 :root {
-  --navy: #315575;
-  --navy-dark: #233f59;
-  --page: #f2f4f6;
-  --text: #28343d;
-  --muted: #66747d;
-  --line: #d5dde4;
+  --navy: #97543d;
+  --navy-dark: #5e3d30;
+  --page: #f8f2e9;
+  --text: #433a32;
+  --muted: #7b6d60;
+  --line: #e1d4c7;
 }
-html, body { background: #f2f4f6; color: var(--text); }
+html, body { background: #f8f2e9; color: #433a32; }
 .site-header {
-  color: #283f51;
-  background: #e8edf2;
-  border-bottom: 2px solid #c5d0db;
+  color: #fff;
+  background: #78503f;
+  border-bottom: 3px solid #ad7459;
 }
-.header-inner { min-height: 94px; gap: 17px; }
-.brand, .brand b { color: #284b66; }
+.header-inner { min-height: 96px; gap: 17px; }
+.brand, .brand b { color: #fff; }
 .brand b { font-size: 29px; }
-.brand small { font-size: 15px; color: #657782; }
+.brand small { font-size: 15px; color: #f2e0d1; }
 .side-nav { gap: 5px; }
 .side-nav button {
   min-height: 56px;
   padding: 11px 18px;
   font-size: 20px;
   font-weight: bold;
-  color: #294a64;
+  color: #fff;
   background: transparent;
   border: 1px solid transparent;
 }
 .side-nav button:hover {
-  color: #26435b;
-  background: #dbe4eb;
-  border-color: #b9cad7;
+  background: #946651;
+  color: #fff;
+  border-color: #e0ae92;
 }
 .side-nav button.selected, .side-nav button.selected:hover {
-  color: #234b69;
-  background: #fff;
-  border: 1px solid #b5c6d4;
-  border-bottom: 3px solid #537c9b;
+  color: #69402e;
+  background: #fff6ed;
+  border: 1px solid #ead4c2;
+  border-bottom: 3px solid #ca8760;
 }
 .hero-banner {
-  background: #eaf0f5;
-  border-bottom: 1px solid #d0dce4;
+  background: #f1e2d0;
+  border-bottom: 1px solid #d7c4af;
 }
-.hero-copy h1 { color: #284961; }
-.hero-kicker { color: #58748b; font-weight: bold; letter-spacing: 0; }
+.hero-copy h1 { color: #684634; }
+.hero-kicker { color: #95684d; font-weight: bold; letter-spacing: 0; }
 .hero-card {
-  background: #fff;
-  border: 1px solid #d1dce6;
-  border-left: 4px solid #6e93ae;
+  background: #fffaf5;
+  border: 1px solid #dccdbd;
+  border-left: 4px solid #ad7659;
 }
 .hero-illustration {
   display: block;
@@ -427,46 +426,45 @@ html, body { background: #f2f4f6; color: var(--text); }
   margin: 0 auto 14px;
 }
 .features-band {
-  background: #fff;
-  border: 1px solid #d2dce5;
-  border-top: 3px solid #7d9db6;
+  background: #fffaf4;
+  border: 1px solid #dfd0c0;
+  border-top: 3px solid #bc8464;
 }
 .feature-card { padding-top: 8px; }
 .stat-grid .stat-card, .stat-grid.two .stat-card {
-  background: #fff;
-  border-top-color: #7a96ac;
+  background: #fffdf9;
+  border-top-color: #bc8464;
 }
-.panel, .page-top { background: #fff; }
-.page-top { border-left: 4px solid #829fb5; }
-th { background: #e8edf1; color: #284961; }
+.panel, .page-top { background: #fffdf9; }
+.page-top { border-left: 4px solid #b98262; }
+th { background: #f2e3d2; color: #5b3c30; }
 .primary-button, .hero-primary {
   color: #fff;
-  background: #315b7b;
-  border: 1px solid #315b7b;
+  background: #a96243;
+  border: 1px solid #874a33;
 }
-.primary-button:hover, .hero-primary:hover { background: #264b69; border-color: #264b69; }
-.type-switch button.active { background: #315b7b; color: #fff; }
+.primary-button:hover, .hero-primary:hover { background: #8d5038; border-color: #8d5038; }
+.type-switch button.active { background: #a96243; color: #fff; }
 .site-footer {
-  color: #2e485e;
-  background: #e8edf2;
-  border-top: 2px solid #ced8e2;
+  color: #563e31;
+  background: #ead6c1;
+  border-top: 2px solid #d1b79b;
 }
-.footer-author, .footer-author strong { color: #2d485e; }
-.footer-project span { color: #63798a; }
-.footer-reset { color: #36536a; border-color: #b1c3d0; }
-.footer-reset:hover { background: #d9e3ec; }
+.footer-author, .footer-author strong { color: #563e31; }
+.footer-project span { color: #755c4a; }
+.footer-reset { color: #624735; border-color: #bb9b82; }
+.footer-reset:hover { background: #e4cdb6; }
+.section-intro h2, .panel-title-row h2, .features-heading h2, h1, h2, h3 { color: #654332; }
+.stat-number, .strong-cell { color: #6c4733; }
+.stat-card:nth-child(n) { border-top-color: #bc8464; }
+tbody tr:hover { background: #f9ead9; }
+.stat-help { color: #796959; }
+.status, .quiet-button { color: #7d543d; }
 @media (max-width: 620px) {
   .side-nav { justify-content: flex-start; gap: 5px; }
   .side-nav button { min-height: 50px; padding: 9px 14px; font-size: 18px; }
   .hero-illustration { max-height: 96px; }
 }
-
-/* Сброс оставшихся цветных акцентов предыдущей темы. */
-.section-intro h2, .panel-title-row h2, .features-heading h2, h1, h2, h3 { color: #284961; }
-.stat-number, .strong-cell { color: #294e69; }
-.stat-card:nth-child(n) { border-top-color: #849fb2; }
-tbody tr:hover { background: #f0f4f7; }
-.stat-help { color: #66747d; }
 
 /* Картинки в карточках и разделах: небольшие тематические рисунки, не иконки меню. */
 .feature-picture {
