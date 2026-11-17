@@ -366,3 +366,100 @@ tfoot td { border-top: 2px solid #9db1c6; }
   display: none !important; content: none !important;
 }
 .build-version { font-size: 12px; line-height: 1.35; color: #dce8f5; }
+/* ===== Обновлённое оформление: мягкие градиенты ===== */
+/* Цвета сайта. Функции склада эта часть не меняет. */
+:root {
+  --navy: #31569b;
+  --navy-dark: #273f7c;
+  --page: #f3f5ff;
+  --line: #d5dcf2;
+}
+body { background: linear-gradient(135deg, #f8faff 0%, #eef4ff 52%, #f7f1ff 100%) fixed; }
+
+/* Крупное меню с нарисованными значками */
+.site-header {
+  background: linear-gradient(115deg, #173966 0%, #345ca8 56%, #6049a5 100%);
+  border-bottom: 3px solid #9cbcff;
+}
+.header-inner { min-height: 91px; gap: 16px; }
+.brand b { font-size: 27px; }
+.brand small { font-size: 14px; }
+.side-nav { gap: 6px; }
+.side-nav button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 49px;
+  padding: 10px 15px;
+  font-size: 17px;
+  font-weight: bold;
+}
+.menu-glyph {
+  display: inline-block;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+}
+.side-nav button:hover { background: rgba(255,255,255,.15); border-color: #bcd0ff; }
+.side-nav button.selected, .side-nav button.selected:hover {
+  background: #f7f8ff;
+  color: #263f80;
+  border: 1px solid #e4eafd;
+  border-bottom: 3px solid #bdadff;
+}
+
+/* Главная страница с иллюстрацией и воздушным фоном */
+.hero-banner {
+  background: linear-gradient(118deg, #e6f1ff 0%, #f0edff 64%, #f5eaff 100%);
+  border-bottom: 1px solid #d3daf3;
+}
+.hero-copy h1 { color: #203b75; }
+.hero-kicker { color: #465cac; letter-spacing: .6px; font-weight: bold; }
+.hero-card {
+  background: linear-gradient(150deg, #ffffff 0%, #f9f8ff 100%);
+  border: 1px solid #dce2fa;
+  border-left: 4px solid #7b75d7;
+}
+.hero-illustration {
+  display: block;
+  width: 100%;
+  max-height: 205px;
+  object-fit: contain;
+  margin: -13px auto 12px;
+}
+
+/* Карточки, таблицы и кнопки */
+.stat-grid .stat-card, .stat-grid.two .stat-card {
+  background: linear-gradient(145deg, #ffffff 0%, #f6f7ff 100%);
+}
+.features-band {
+  background: linear-gradient(145deg, #ffffff 0%, #f7f8ff 100%);
+  border-top-color: #8683d7;
+}
+.feature-glyph {
+  display: block;
+  width: 31px;
+  height: 31px;
+  color: #655bc0;
+  margin-bottom: 10px;
+}
+.panel, .page-top { background: linear-gradient(160deg, #ffffff 0%, #fafbff 100%); }
+.page-top { border-left-color: #7a71d4; }
+th { background: linear-gradient(115deg, #e7f0ff, #eeeaff); }
+.primary-button, .hero-primary {
+  background: linear-gradient(110deg, #27579f, #6751bd);
+  border-color: #344782;
+  color: #fff;
+}
+.primary-button:hover, .hero-primary:hover { background: linear-gradient(110deg, #1d488b, #5541a8); }
+.type-switch button.active { background: linear-gradient(110deg, #315ca7, #6552b5); }
+.site-footer { background: linear-gradient(115deg, #173966, #4c4e9e); }
+
+/* На телефоне меню прокручивается, и текст с иконками не сжимается */
+@media (max-width: 620px) {
+  .side-nav { justify-content: flex-start; gap: 5px; }
+  .side-nav button { font-size: 16px; min-height: 48px; padding: 9px 13px; }
+  .menu-glyph { width: 21px; height: 21px; flex-basis: 21px; }
+  .hero-illustration { max-height: 180px; }
+}

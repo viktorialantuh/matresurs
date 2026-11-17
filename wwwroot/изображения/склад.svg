@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="660" height="440" viewBox="0 0 660 440" role="img" aria-label="Иллюстрация склада: коробки, полки и ведомость">
+  <defs>
+    <linearGradient id="back" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e6efff"/><stop offset="1" stop-color="#dfd6fb"/></linearGradient>
+    <linearGradient id="shelf" x1="0" y1="0" x2="1" y2=".75"><stop stop-color="#5276c8"/><stop offset="1" stop-color="#34498b"/></linearGradient>
+    <linearGradient id="box" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd9a8"/><stop offset="1" stop-color="#f3ad6a"/></linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b59aff"/><stop offset="1" stop-color="#6654c6"/></linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#eaf5ff"/></linearGradient>
+  </defs>
+  <path d="M89 290C39 236 72 139 150 113c45-16 69 12 111-6S355 31 448 77c67 33 35 70 94 94s84 83 31 152c-54 70-167 75-283 60C180 368 136 340 89 290Z" fill="url(#back)"/>
+  <ellipse cx="336" cy="389" rx="229" ry="21" fill="#b6c4ef" opacity=".43"/>
+  <g>
+    <path d="M337 111v260M554 111v260" stroke="url(#shelf)" stroke-width="19" stroke-linecap="round"/>
+    <path d="M328 150h236M328 267h236M328 370h236" stroke="#3e589f" stroke-width="16" stroke-linecap="round"/>
+    <path d="M329 141h234M329 259h234M329 361h234" stroke="#7898ea" stroke-width="8" stroke-linecap="round"/>
+    <g>
+      <rect x="353" y="174" width="93" height="81" rx="7" fill="url(#box)"/>
+      <path d="M353 182l47-18 46 18M400 164v91" stroke="#d88c58" stroke-width="4" fill="none"/>
+      <path d="M389 204v19m-6-6 6 6 6-6" stroke="#a86c4c" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <rect x="461" y="173" width="24" height="82" rx="4" fill="#579bd9"/>
+      <rect x="492" y="173" width="24" height="82" rx="4" fill="#755ddd"/>
+      <rect x="523" y="173" width="23" height="82" rx="4" fill="#3e68c2"/>
+      <path d="M470 193h7m24 0h8m23 0h7" stroke="#d9e7ff" stroke-width="5" stroke-linecap="round"/>
+      <rect x="354" y="288" width="90" height="71" rx="6" fill="url(#box)"/>
+      <rect x="460" y="289" width="88" height="70" rx="6" fill="#f8bd7c"/>
+      <path d="M354 296h90m16 0h88" stroke="#ffe8c1" stroke-width="5"/>
+    </g>
+  </g>
+  <g transform="rotate(-7 192 253)">
+    <rect x="116" y="122" width="145" height="228" rx="13" fill="#4977c4"/>
+    <rect x="127" y="133" width="123" height="203" rx="9" fill="url(#paper)"/>
+    <rect x="159" y="116" width="63" height="19" rx="9" fill="#354eaa"/>
+    <circle cx="155" cy="181" r="11" fill="#43c2b2"/><path d="m149 181 5 5 8-10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <path d="M175 178h51M175 189h41" stroke="#97b3df" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="155" cy="229" r="11" fill="#43c2b2"/><path d="m149 229 5 5 8-10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <path d="M175 226h51M175 237h41" stroke="#97b3df" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="155" cy="277" r="11" fill="#43c2b2"/><path d="m149 277 5 5 8-10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <path d="M175 274h51M175 285h41" stroke="#97b3df" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <g>
+    <path d="M268 326h112l25 51H247z" fill="#4e74d0"/>
+    <rect x="257" y="275" width="130" height="75" rx="9" fill="url(#purple)"/>
+    <rect x="274" y="287" width="93" height="43" rx="6" fill="#e3eaff"/>
+    <path d="M291 319v-10m16 10v-19m16 19v-28m16 28v-14" stroke="#588cdb" stroke-width="9" stroke-linecap="round"/>
+  </g>
+  <g><circle cx="579" cy="95" r="23" fill="#e8f3ff" opacity=".8"/><path d="M567 95h24m-12-12v24" stroke="#6a83c9" stroke-width="4" stroke-linecap="round"/></g>
+  <g><circle cx="86" cy="330" r="11" fill="#e4ddff"/><circle cx="303" cy="85" r="8" fill="#b3cbff"/></g>
+</svg>
