@@ -9,19 +9,19 @@
 <div class="header-inner"> <div class="brand"><div><b>МатРесурс</b><small>Учёт материалов</small></div></div>
       <nav class="side-nav" aria-label="Разделы системы">
         <button type="button" class="@(tab == "home" ? "selected" : "")" @onclick='() => Go("home")'>
-          <svg class="menu-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg> Главная
+          Главная
         </button>
         <button type="button" class="@(tab == "materials" ? "selected" : "")" @onclick='() => Go("materials")'>
-          <svg class="menu-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Материалы
+          Материалы
         </button>
         <button type="button" class="@(tab == "operation" ? "selected" : "")" @onclick='() => Go("operation")'>
-          <svg class="menu-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16m-5-5 5 5-5 5M20 17H4m5-5-5 5 5 5"/></svg> Приход и расход
+          Приход и расход
         </button>
         <button type="button" class="@(tab == "history" ? "selected" : "")" @onclick='() => Go("history")'>
-          <svg class="menu-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg> История
+          История
         </button>
         <button type="button" class="@(tab == "report" ? "selected" : "")" @onclick='() => Go("report")'>
-          <svg class="menu-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 21h17M6 19v-7h4v7M11 19V5h4v14M16 19v-9h4v9"/></svg> Отчёт
+          Отчёт
         </button>
       </nav>
 </div>
@@ -50,8 +50,8 @@
 <div class="stat-card"><div class="stat-label">Общая стоимость</div><div class="stat-number">@Money(TotalValue)</div><div class="stat-help">По учётным ценам</div></div> <div class="stat-card"><div class="stat-label">Мало на складе</div><div class="stat-number">@LowCount</div><div class="stat-help">Требуют внимания</div></div> </div>
         @* Основные возможности системы описаны в трёх разделах. *@
         <section class="features-band" aria-label="Возможности системы">
-<div class="features-heading"><span>ВОЗМОЖНОСТИ СИСТЕМЫ</span><h2>Всё необходимое для учёта</h2></div> <div class="features-grid"> <article class="feature-card"><svg class="feature-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 7V5h7l2 3h9v12H3z"/></svg><h3>Справочник материалов</h3><p>Добавление новых позиций, изменение цен и контроль минимального остатка.</p></article>
-<article class="feature-card"><svg class="feature-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16m-5-5 5 5-5 5M20 17H4m5-5-5 5 5 5"/></svg><h3>Приход и расход</h3><p>Регистрация движения ресурсов с автоматическим пересчётом количества.</p></article> <article class="feature-card"><svg class="feature-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 20h16M6 18v-6h4v6M11 18V5h4v13M16 18v-9h4v9"/></svg><h3>Отчётность</h3><p>История операций, итоговая стоимость запасов и скачивание отчета.</p></article> </div>
+<div class="features-heading"><span>ВОЗМОЖНОСТИ СИСТЕМЫ</span><h2>Всё необходимое для учёта</h2></div> <div class="features-grid"> <article class="feature-card"><img class="feature-illustration" src="изображения/материалы.svg" alt="Коробки и папки на складской полке" loading="eager" /><h3>Справочник материалов</h3><p>Добавление новых позиций, изменение цен и контроль минимального остатка.</p></article>
+<article class="feature-card"><img class="feature-illustration" src="изображения/операции.svg" alt="Коробки и стрелки движения материалов" loading="eager" /><h3>Приход и расход</h3><p>Регистрация движения ресурсов с автоматическим пересчётом количества.</p></article> <article class="feature-card"><img class="feature-illustration" src="изображения/отчет.svg" alt="Ведомость с диаграммой" loading="eager" /><h3>Отчётность</h3><p>История операций, итоговая стоимость запасов и скачивание отчета.</p></article> </div>
         </section>
 <div class="panel"> <div class="panel-title-row"><div><h2>Остатки материалов</h2><p>Актуальные сведения по всем позициям</p></div><button class="quiet-button" @onclick='() => Go("materials")'>Все материалы</button></div> <ТаблицаМатериалов Items="data.Materials" AllowEdit="false" /> </div>
 <div class="hint-panel"><b>Как пользоваться?</b><span>1. Добавь материал. 2. Оформи приход или расход. 3. Посмотри остатки и отчёт.</span></div>
