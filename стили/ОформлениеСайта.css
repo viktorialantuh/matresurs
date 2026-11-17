@@ -366,102 +366,106 @@ tfoot td { border-top: 2px solid #9db1c6; }
   display: none !important; content: none !important;
 }
 .build-version { font-size: 12px; line-height: 1.35; color: #dce8f5; }
-/* ===== Обновлённое оформление: мягкие градиенты ===== */
-/* Цвета сайта. Функции склада эта часть не меняет. */
+/* ===== Нежная светлая тема: белый, голубой и сиреневый ===== */
+/* Меню без значков, крупные названия разделов. */
 :root {
-  --navy: #963f96;
-  --navy-dark: #702971;
-  --page: #fdf4fc;
-  --line: #ead5e9;
+  --navy: #6584ba;
+  --navy-dark: #354d78;
+  --page: #f7f9ff;
+  --text: #28364d;
+  --muted: #5c6b80;
+  --line: #d9e1ef;
 }
-body { background: linear-gradient(135deg, #fff8fd 0%, #fae8f6 52%, #f2e8ff 100%) fixed; }
-
-/* Крупное меню с нарисованными значками */
+body { background: linear-gradient(135deg, #fff 0%, #f2f8ff 51%, #f6f1ff 100%) fixed; }
 .site-header {
-  background: linear-gradient(115deg, #752b73 0%, #b34495 53%, #713aaf 100%);
-  border-bottom: 3px solid #f3b3e8;
+  color: #304663;
+  background: linear-gradient(115deg, #f4f9ff 0%, #e8f1ff 53%, #f0e9fc 100%);
+  border-bottom: 2px solid #d6e0f2;
 }
-.header-inner { min-height: 91px; gap: 16px; }
+.header-inner { min-height: 86px; gap: 16px; }
+.brand, .brand b { color: #344e77; }
 .brand b { font-size: 27px; }
-.brand small { font-size: 14px; }
-.side-nav { gap: 6px; }
+.brand small { color: #647790; font-size: 14px; }
+.side-nav { gap: 5px; }
 .side-nav button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  min-height: 49px;
-  padding: 10px 15px;
+  min-height: 48px;
+  padding: 10px 17px;
+  color: #3b5274;
   font-size: 17px;
   font-weight: bold;
 }
-.menu-glyph {
-  display: inline-block;
-  width: 23px;
-  height: 23px;
-  flex: 0 0 23px;
-}
-.side-nav button:hover { background: rgba(255,255,255,.15); border-color: #f9c5f2; }
+.side-nav button:hover { background: #e3edfd; border-color: #c8d7ee; }
 .side-nav button.selected, .side-nav button.selected:hover {
-  background: #fff7fe;
-  color: #742b7d;
-  border: 1px solid #f4d8f3;
-  border-bottom: 3px solid #d888e8;
+  background: #fff;
+  color: #425c8c;
+  border: 1px solid #cedbf1;
+  border-bottom: 3px solid #9e98d6;
 }
-
-/* Главная страница с иллюстрацией и воздушным фоном */
+/* Большой рисунок склада на главной */
 .hero-banner {
-  background: linear-gradient(118deg, #fce3f1 0%, #f6e7fb 64%, #ede0ff 100%);
-  border-bottom: 1px solid #ebcfea;
+  background: linear-gradient(118deg, #eaf5ff 0%, #f1f0ff 65%, #faf6ff 100%);
+  border-bottom: 1px solid #dce4f4;
 }
-.hero-copy h1 { color: #722c7d; }
-.hero-kicker { color: #a23f9f; letter-spacing: .6px; font-weight: bold; }
+.hero-copy h1 { color: #354e7b; }
+.hero-kicker { color: #687eaf; letter-spacing: .6px; font-weight: bold; }
 .hero-card {
-  background: linear-gradient(150deg, #ffffff 0%, #fff3fd 100%);
-  border: 1px solid #eed8ef;
-  border-left: 4px solid #bf69c3;
+  background: linear-gradient(150deg, #fff 0%, #f6f8ff 100%);
+  border: 1px solid #d9e1f1;
+  border-left: 4px solid #a8a1d9;
 }
 .hero-illustration {
   display: block;
   width: 100%;
-  max-height: 205px;
+  max-height: 245px;
   object-fit: contain;
   margin: -13px auto 12px;
 }
-
-/* Карточки, таблицы и кнопки */
+/* Три дополнительные картинки на главной вместо маленьких значков */
+.feature-illustration {
+  display: block;
+  width: 100%;
+  height: 145px;
+  object-fit: contain;
+  margin: 0 0 12px;
+}
+.feature-card { padding-top: 12px; }
 .stat-grid .stat-card, .stat-grid.two .stat-card {
-  background: linear-gradient(145deg, #ffffff 0%, #fcf0fb 100%);
+  background: linear-gradient(145deg, #fff 0%, #f8faff 100%);
 }
 .features-band {
-  background: linear-gradient(145deg, #ffffff 0%, #fff1fb 100%);
-  border-top-color: #c781d2;
+  background: linear-gradient(145deg, #fff 0%, #f8f8ff 100%);
+  border-top-color: #a7aedf;
 }
-.feature-glyph {
-  display: block;
-  width: 31px;
-  height: 31px;
-  color: #a74eb7;
-  margin-bottom: 10px;
-}
-.panel, .page-top { background: linear-gradient(160deg, #ffffff 0%, #fff8fe 100%); }
-.page-top { border-left-color: #c16dc3; }
-th { background: linear-gradient(115deg, #fbe6f5, #f2e3fc); }
+.panel, .page-top { background: linear-gradient(160deg, #fff 0%, #fbfcff 100%); }
+.page-top { border-left-color: #a2a1d9; }
+th { background: linear-gradient(115deg, #ecf5ff, #f0edfa); }
+/* Кнопки и подвал в спокойных оттенках */
 .primary-button, .hero-primary {
-  background: linear-gradient(110deg, #b43d93, #7949b7);
-  border-color: #803784;
   color: #fff;
+  background: linear-gradient(110deg, #6e8ec5, #8573b9);
+  border-color: #6d7dac;
 }
-.primary-button:hover, .hero-primary:hover { background: linear-gradient(110deg, #9d317f, #67399f); }
-.type-switch button.active { background: linear-gradient(110deg, #b74293, #7950b7); }
-.site-footer { background: linear-gradient(115deg, #762873, #803da4); }
-
-/* На телефоне меню прокручивается, и текст с иконками не сжимается */
+.primary-button:hover, .hero-primary:hover {
+  background: linear-gradient(110deg, #577cb9, #7260a7);
+}
+.type-switch button.active { background: linear-gradient(110deg, #6d8fc4, #8574b6); }
+.site-footer {
+  color: #314967;
+  background: linear-gradient(115deg, #eaf4ff, #efebfc);
+  border-top: 2px solid #d2def0;
+}
+.footer-author, .footer-author strong { color: #354a69; }
+.footer-project span { color: #60718c; }
+.footer-reset { color: #405477; border-color: #b4c5df; }
+.footer-reset:hover { background: #dce8f9; }
 @media (max-width: 620px) {
   .side-nav { justify-content: flex-start; gap: 5px; }
-  .side-nav button { font-size: 16px; min-height: 48px; padding: 9px 13px; }
-  .menu-glyph { width: 21px; height: 21px; flex-basis: 21px; }
+  .side-nav button { font-size: 16px; min-height: 45px; padding: 9px 13px; }
   .hero-illustration { max-height: 180px; }
+  .feature-illustration { height: 120px; }
 }
 
 /* ===== Иллюстрации разделов сайта ===== */
