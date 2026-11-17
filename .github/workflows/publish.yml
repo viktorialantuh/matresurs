@@ -56,6 +56,8 @@ jobs:
           touch publish/wwwroot/.nojekyll
           # Дополнительный новый адрес: без старого HTML из кэша браузера.
           cp publish/wwwroot/index.html publish/wwwroot/bez-znachkov.html
+          # Отдельный адрес для проверки нового оформления без старой кэшированной страницы.
+          cp publish/wwwroot/index.html publish/wwwroot/svetlaya-versiya.html
           echo "Base path: $BASE"
       # Последние действия: подготовить Pages, загрузить файлы, опубликовать.
       - name: Setup GitHub Pages
